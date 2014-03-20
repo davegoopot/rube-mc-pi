@@ -4,10 +4,10 @@ import unittest
 
 class TestRube(unittest.TestCase):
 
-	def test_getState(self):
+	def test_pollState(self):
 		source = MockSource()
 		source.state = 1
-		self.assertEqual(source.getState(), 1)
+		self.assertEqual(source.pollState(), 1)
 		
 	def test_updateState(self):
 		target = MockTarget()
@@ -16,7 +16,7 @@ class TestRube(unittest.TestCase):
 		
 class MockSource(rube.Source):
 	
-	def getState(self):
+	def pollState(self):
 		return 1
 		
 		
