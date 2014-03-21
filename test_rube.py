@@ -1,5 +1,5 @@
 import rube
-import  
+import unittest
 
 
 class TestRube(unittest.TestCase):
