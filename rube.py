@@ -3,24 +3,24 @@
 
 
 class Source(object):
-	"""A source object represents the part of the machine that will trigger the next step when it completes.
-	
-	A source adaptor is responsible for responding to the pollState() method by returning the current state of the source part of the machine.
-	
-	"""
-	
-	def pollState(self):
-		raise NotImplementedError("It is for concrete implementations of this class to fill in the pollState() method.")
-		
-		
-		
+    """A source object represents the part of the machine that will trigger the next step when it completes.
+    
+    A source adaptor is responsible for responding to the pollState() method by returning the current state of the source part of the machine.
+    
+    """
+    
+    def pollState(self):
+        raise NotImplementedError("It is for concrete implementations of this class to fill in the pollState() method.")
+        
+        
+        
 class Target(object):
-	"""
-	A target object represents the part of the machine that should be triggered to start of the next step running.
-	
-	A target adaptor is responsible for responding to the updateState(block) method by taking appropriate actions to update its state.
-	
-	"""
-	
-	def updateState(self, block):
-		raise NotImplementedError("It is for concrete implementations of this class to fill in the updateState(block) method.")
+    """
+    A target object represents the part of the machine that should be triggered to start of the next step running.
+    
+    A target adaptor is responsible for responding to the updateState(block) method by taking appropriate actions to update its state.
+    
+    """
+    
+    def updateState(self, block):
+        raise NotImplementedError("It is for concrete implementations of this class to fill in the updateState(block) method.")
