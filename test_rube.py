@@ -34,6 +34,15 @@ class TestRube(unittest.TestCase):
 		self.source._state = 2
 		self.controller.update_all_once()
 		self.assertEquals(self.target.last_state_update, 2)
+
+	def test_update_not_called_if_state_doesnt_change(self):
+		self.source._state = 1
+		
+		self.controller.update_all_once()
+		self.target.was_update_state_called = False
+		self.controller.update_all_once()
+		self.assertFalse(self.target.was_update_state_called)
+
         
 class MockSource(rube.Source):
     
@@ -47,9 +56,16 @@ class MockSource(rube.Source):
         
         
 class MockTarget(rube.Target):
+
+    def __init__(self):
+        super(MockTarget, self).__init__()
+    	self.was_update_state_called = False
+
     
     def update_state(self, block):
         self.last_state_update = block
+        self.was_update_state_called = True
+        
 
     
     

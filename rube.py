@@ -19,7 +19,8 @@ class RubeController(object):
         
         for (source, target) in self.config:
             new_state = source.poll_state()
-            target.update_state(new_state)
+            if target.last_state_update != new_state:
+            	target.update_state(new_state)
 
 class Source(object):
     """A source object represents the part of the machine that will trigger the 
@@ -47,6 +48,9 @@ class Target(object):
     method by taking appropriate actions to update its state.
     
     """
+    
+    def __init__(self):
+    	self.last_state_update = "test"
     
     def update_state(self, block):
         """Ask the target component to set its state to the passed Minecraft 
