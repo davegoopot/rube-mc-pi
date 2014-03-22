@@ -16,7 +16,9 @@ class RubeController(object):
 
 	def update_all_once(self):
 		"""Run through all the config pairs once checking state and updating """
-		self.config[0][0].poll_state()
+		
+		for (source, target) in self.config:
+			source.poll_state()
 
 class Source(object):
     """A source object represents the part of the machine that will trigger the 

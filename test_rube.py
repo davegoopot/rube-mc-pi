@@ -17,11 +17,12 @@ class TestRube(unittest.TestCase):
 		self.assertEqual(self.target.last_state_update, 1)
 	
 	def test_event_loop(self):
-		config = ( (self.source, self.target),  )
+		source2 = MockSource()
+		config = ( (self.source, self.target), (source2, None)  )
 		controller = rube.RubeController(config)
 		controller.update_all_once()
 		self.assertTrue(self.source.was_poll_state_called)
-	
+		self.assertTrue(source2.was_poll_state_called)
 	
         
 class MockSource(rube.Source):
