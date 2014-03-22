@@ -46,16 +46,36 @@ class TestRube(unittest.TestCase):
     def test_event_loop(self):
         self.source.state = 1
         self.source.loops_before_stop = 7
-        loops_before_change = 4
-        new_state = 99    
+        loops_before_change = 2
+        new_state = 2   
         self.source.state_changes = { loops_before_change: new_state }
-        expected_state_log = [1, 99]
+        loops_before_change = 5
+        new_state = 99
+        self.source.state_changes[loops_before_change] = new_state
+        expected_state_log = [2, 99]
         try:
             self.controller.run_event_loop()
         except KeyboardInterrupt:
             pass
         self.assertEquals(self.target.state_log, expected_state_log)
 
+    def test_record_initial_states(self):
+        source2 = MockSource()
+        source2.state = 99
+        target2 = MockTarget()
+        self.config.append((source2, target2) ,)
+        
+        self.controller.record_initial_states()
+        self.assertEquals(self.target.last_state_update, self.source.state)
+        self.assertEquals(target2.last_state_update, source2.state)
+        
+    def test_first_event_loop_doesnt_set_state(self):
+        self.source.loops_before_stop = 3
+        try:
+            self.controller.run_event_loop()
+        except KeyboardInterrupt:
+            pass
+        self.assertEquals(self.target.state_log, [ ])
         
 class MockSource(rube.Source):
     

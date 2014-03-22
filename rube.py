@@ -15,8 +15,16 @@ class RubeController(object):
 
     def run_event_loop(self):
         """Run the event loop continuously looking for state changes"""
+        
+        self.record_initial_states()
         while True:
             self.update_all_once()
+      
+    def record_initial_states(self):
+        """Record the initial state but don't trigger any update"""
+        
+        for (source, target) in self.config:
+            target.last_state_update =  source.poll_state()
         
     def update_all_once(self):
         """Run through all the config pairs once checking state and updating """
