@@ -7,7 +7,9 @@ class TestRube(unittest.TestCase):
     def setUp(self):
         self.source = MockSource()
         self.target = MockTarget()
-        self.config = [ (self.source, self.target),  ]
+        self.source2 = MockSource()
+        self.target2 = MockTarget()
+        self.config = [ (self.source, self.target), (self.source2, self.target2)  ]
         self.controller = rube.RubeController(self.config)
 
     def test_poll_state(self):
@@ -19,13 +21,9 @@ class TestRube(unittest.TestCase):
         self.assertEqual(self.target.last_state_update, 1)
 
     def test_event_loop_calls_poll(self):
-        source2 = MockSource()
-        target2 = MockTarget()
-        self.config.append((source2, target2) ,)
-        
         self.controller.update_all_once()
         self.assertTrue(self.source.was_poll_state_called)
-        self.assertTrue(source2.was_poll_state_called)
+        self.assertTrue(self.source2.was_poll_state_called)
     
     def test_event_loop_calls_update_on_change(self):
         self.source.state = 1
@@ -60,14 +58,11 @@ class TestRube(unittest.TestCase):
         self.assertEquals(self.target.state_log, expected_state_log)
 
     def test_record_initial_states(self):
-        source2 = MockSource()
-        source2.state = 99
-        target2 = MockTarget()
-        self.config.append((source2, target2) ,)
+        self.source2.state = 99
         
         self.controller.record_initial_states()
         self.assertEquals(self.target.last_state_update, self.source.state)
-        self.assertEquals(target2.last_state_update, source2.state)
+        self.assertEquals(self.target2.last_state_update, self.source2.state)
         
     def test_first_event_loop_doesnt_set_state(self):
         self.source.loops_before_stop = 3
