@@ -14,9 +14,21 @@ class TestRube(unittest.TestCase):
         target.update_state(1)
         self.assertEqual(target.last_state_update, 1)
         
+    def test_event_loop(self):
+    	source = MockSource()
+    	target = MockTarget()
+    	config = ( (source, target),  )
+    	controller = rube.RubeController(config)
+    	controller.update_all_once()
+    	self.assertTrue(source.was_poll_state_called)
+        
 class MockSource(rube.Source):
     
+    def __init__(self):
+    	self.was_poll_state_called = False
+    
     def poll_state(self):
+    	self.was_poll_state_called = True
         return 1
         
         

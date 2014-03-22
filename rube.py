@@ -1,6 +1,22 @@
 """Code to manage the Rube Goldberg project for the Manchester CoderDojo """
 
 
+class RubeController(object):
+	""""Responsible for controlling the interactions between components in
+	the Rube Goldberg machine.
+	"""
+
+	def __init__(self, config):
+		"""Set up a controller using the passed config.
+
+		The config is a tuple of (source, target) pairs.
+		"""
+		self.config = config
+
+
+	def update_all_once(self):
+		"""Run through all the config pairs once checking state and updating """
+		self.config[0][0].poll_state()
 
 class Source(object):
     """A source object represents the part of the machine that will trigger the 
