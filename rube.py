@@ -13,7 +13,11 @@ class RubeController(object):
         """
         self.config = config
 
-
+    def run_event_loop(self):
+        """Run the event loop continuously looking for state changes"""
+        while True:
+            self.update_all_once()
+        
     def update_all_once(self):
         """Run through all the config pairs once checking state and updating """
         
