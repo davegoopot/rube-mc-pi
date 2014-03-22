@@ -28,15 +28,15 @@ class TestRube(unittest.TestCase):
         self.assertTrue(source2.was_poll_state_called)
     
     def test_event_loop_calls_update_on_change(self):
-        self.source._state = 1
+        self.source.state = 1
         
         self.controller.update_all_once()
-        self.source._state = 2
+        self.source.state = 2
         self.controller.update_all_once()
         self.assertEquals(self.target.last_state_update, 2)
 
     def test_update_not_called_if_state_doesnt_change(self):
-        self.source._state = 1
+        self.source.state = 1
         
         self.controller.update_all_once()
         self.target.was_update_state_called = False
@@ -44,7 +44,7 @@ class TestRube(unittest.TestCase):
         self.assertFalse(self.target.was_update_state_called)
 
     def test_event_loop(self):
-        self.source._state = 1
+        self.source.state = 1
         self.source.loops_before_stop = 7
         loops_before_change = 4
         new_state = 99    
@@ -61,7 +61,7 @@ class MockSource(rube.Source):
     
     def __init__(self):
         self.was_poll_state_called = False
-        self._state = 1
+        self.state = 1
         self.query_count = 0
         self.loops_before_stop = None
         self.state_changes = {}
@@ -72,9 +72,9 @@ class MockSource(rube.Source):
         if self.query_count == self.loops_before_stop:
             raise KeyboardInterrupt()
         if self.state_changes.has_key(self.query_count):
-            self._state = self.state_changes[self.query_count]
+            self.state = self.state_changes[self.query_count]
         
-        return self._state
+        return self.state
         
         
 class MockTarget(rube.Target):
