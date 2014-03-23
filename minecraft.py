@@ -42,13 +42,12 @@ class MinecraftTarget(rube.Target):
     
     def update_state(self, block):
         self.world_connection.setBlock(self.x, self.y, self.z, block)
-        super(MinecraftTarget, self).update_state(block)
     
         
 if __name__ == "__main__":
-    SOURCE = MinecraftSource("localhost", x=1, y=2, z=3)
-    TARGET = MinecraftTarget("localhost", x=5, y=2, z=3)
+    SOURCE = MinecraftSource("localhost", x=1, y=10, z=3)
+    TARGET = MinecraftTarget("localhost", x=2, y=10, z=3)
     CONFIG = ( (SOURCE, TARGET), )
-    SOURCE.world_connection.setBlock(SOURCE.x, SOURCE.y, SOURCE.z, 1)
+    SOURCE.world_connection.setBlock(SOURCE.x, SOURCE.y, SOURCE.z, 2)
     CONTROLLER = rube.RubeController(CONFIG)
     CONTROLLER.run_event_loop()
