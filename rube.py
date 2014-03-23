@@ -33,6 +33,7 @@ class RubeController(object):
             new_state = source.poll_state()
             if target.last_state_update != new_state:
                 target.update_state(new_state)
+                target.last_state_update = new_state
 
 class Source(object):
     """A source object represents the part of the machine that will trigger the 

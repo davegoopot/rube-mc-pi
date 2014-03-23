@@ -16,10 +16,6 @@ class TestRube(unittest.TestCase):
         self.source.state = 1
         self.assertEqual(self.source.poll_state(), 1)
     
-    def test_update_state(self):
-        self.target.update_state(1)
-        self.assertEqual(self.target.last_state_update, 1)
-
     def test_event_loop_calls_poll(self):
         self.controller.update_all_once()
         self.assertTrue(self.source.was_poll_state_called)
@@ -72,6 +68,14 @@ class TestRube(unittest.TestCase):
             pass
         self.assertEquals(self.target.state_log, [ ])
         
+        
+    def test_target_last_state_updated(self):
+        self.controller.record_initial_states()
+        self.source.state = 2
+        self.controller.update_all_once()
+        self.assertEquals(self.target.last_state_update, 2)
+        
+        
 class MockSource(rube.Source):
     
     def __init__(self):
@@ -101,7 +105,6 @@ class MockTarget(rube.Target):
 
     
     def update_state(self, block):
-        self.last_state_update = block
         self.state_log.append(block)
         self.was_update_state_called = True
         
