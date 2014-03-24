@@ -76,6 +76,37 @@ class TestRube(unittest.TestCase):
         self.assertEquals(self.target.last_state_update, 2)
         
         
+    def test_json_config_parser(self):
+        parser = rube.ConfigJsonParser()
+             
+        json = """
+[
+     { "source": {
+        "server_address": "source_address", 
+        "server_port": 4711,
+        "x": 1,
+        "y": 2,
+        "z": 3
+        },
+        
+      "target": {
+        "server_address": "target_address", 
+        "server_port": 4712,
+        "x": 4,
+        "y": 5,
+        "z": 6
+        }
+    }
+]
+"""
+        
+        config = parser.parse(json)
+#        print "config is " + str(config)
+#        print "config is " + str(config["config"])
+#        print "len config is " + str(len(config))
+        self.assertEquals(config[0]["source"]["server_address"], "source_address" )
+
+        
 class MockSource(rube.Source):
     
     def __init__(self):

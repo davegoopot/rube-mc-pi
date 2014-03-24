@@ -1,3 +1,5 @@
+import json
+
 """Code to manage the Rube Goldberg project for the Manchester CoderDojo """
 
 
@@ -72,9 +74,18 @@ class Target(object):
             "class to fill in the update_state(block) method.")
 
             
- class ConfigJsonParser(object):
+class ConfigJsonParser(object):
     """Responsible for reading in JSON config and converting it to a config
     object that can set up the RubeController
     
     """
-    pass
+    
+
+    
+    def parse(self, json_string):
+        """Take the json and return (source, target) pairs ready for use"""
+        
+        jsonparse = json.loads(json_string)    
+       
+        
+        return jsonparse
