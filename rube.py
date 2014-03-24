@@ -1,5 +1,6 @@
 """Code to manage the Rube Goldberg project for the Manchester CoderDojo """
 
+import collections
 import json
 import time
 
@@ -81,18 +82,28 @@ class Target(object):
             "class to fill in the update_state(block) method.")
 
             
+
+ConfigPair = collections.namedtuple("ConfigPair", "source target")
+            
 class ConfigJsonParser(object):
     """Responsible for reading in JSON config and converting it to a config
     object that can set up the RubeController
     
     """
     
-
-    
     def parse(self, json_string):
         """Take the json and return (source, target) pairs ready for use"""
-        
-        jsonparse = json.loads(json_string)    
        
         
-        return jsonparse
+        jsonparse = json.loads(json_string)
+        source_module_name = jsonparse[0]["source"]["type"] 
+        source_module = __import__(source_module_name)
+        source_class_name = source_module_name.capitalize() + "Source"
+        source_class = getattr(source_module, source_class_name)
+        source = source_class()
+        source.state = jsonparse[0]["source"]["state"]
+        source.query_count = jsonparse[0]["source"]["query_count"]
+        
+        config = [ ConfigPair(source=source, target=None), ] 
+        
+        return config   
