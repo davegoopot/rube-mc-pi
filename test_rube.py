@@ -1,8 +1,14 @@
 import rube
+import time
 import unittest
 
 
 class TestRube(unittest.TestCase):
+    """
+    TODO: Add pylint exceptions for test class that makes sense
+    TODO: Refactor out method that calls the event loop and catches interupt exception
+    
+    """
 
     def setUp(self):
         self.source = MockSource()
@@ -10,7 +16,7 @@ class TestRube(unittest.TestCase):
         self.source2 = MockSource()
         self.target2 = MockTarget()
         self.config = [ (self.source, self.target), (self.source2, self.target2)  ]
-        self.controller = rube.RubeController(self.config)
+        self.controller = rube.RubeController(self.config, min_loop_duration_ms = 1)
 
     def test_poll_state(self):
         self.source.state = 1
@@ -76,6 +82,21 @@ class TestRube(unittest.TestCase):
         self.assertEquals(self.target.last_state_update, 2)
         
         
+    def test_rate_limit_event_loop(self):
+        self.source = MockSource()
+        self.source.loops_before_stop = 10
+        self.config = [ (self.source, self.target), ]
+        self.controller = rube.RubeController(self.config, min_loop_duration_ms=100)
+        start_time = time.time()
+        try:
+            self.controller.run_event_loop()
+        except KeyboardInterrupt:
+            pass
+        end_time = time.time()
+        run_time = end_time - start_time
+        minimum_time = 10 * 100 / 1000   #
+        self.assertGreater(run_time, minimum_time)
+        
 class MockSource(rube.Source):
     
     def __init__(self):
@@ -88,8 +109,11 @@ class MockSource(rube.Source):
     def poll_state(self):
         self.was_poll_state_called = True
         self.query_count = self.query_count + 1
-        if self.query_count == self.loops_before_stop:
-            raise KeyboardInterrupt()
+        if self.loops_before_stop != None:
+            # Need to take account of the intiall poll_state before the 1st loop
+            if self.query_count > self.loops_before_stop + 1:  
+                raise KeyboardInterrupt()
+
         if self.state_changes.has_key(self.query_count):
             self.state = self.state_changes[self.query_count]
         

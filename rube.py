@@ -1,25 +1,31 @@
 """Code to manage the Rube Goldberg project for the Manchester CoderDojo """
 
+import time
 
 class RubeController(object):
     """"Responsible for controlling the interactions between components in
     the Rube Goldberg machine.
     """
 
-    def __init__(self, config):
+    def __init__(self, config, min_loop_duration_ms=100):
         """Set up a controller using the passed config.
 
         The config is a tuple of (source, target) pairs.
         """
         self.config = config
+        self.min_loop_duration_ms = min_loop_duration_ms
 
     def run_event_loop(self):
         """Run the event loop continuously looking for state changes"""
         
         self.record_initial_states()
         while True:
+            start_time = time.time()
             self.update_all_once()
-      
+            loop_run_time_ms = (time.time() - start_time) * 1000
+            if loop_run_time_ms < self.min_loop_duration_ms:
+                time.sleep((self.min_loop_duration_ms - loop_run_time_ms) / 1000)            
+            
     def record_initial_states(self):
         """Record the initial state but don't trigger any update"""
         
