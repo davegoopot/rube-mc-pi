@@ -70,3 +70,11 @@ class Target(object):
         Block object value."""
         raise NotImplementedError("It is for concrete implementations of this" \
             "class to fill in the update_state(block) method.")
+
+            
+ class ConfigJsonParser(object):
+    """Responsible for reading in JSON config and converting it to a config
+    object that can set up the RubeController
+    
+    """
+    pass
