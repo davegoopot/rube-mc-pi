@@ -24,7 +24,9 @@ class RubeController(object):
             self.update_all_once()
             loop_run_time_ms = (time.time() - start_time) * 1000
             if loop_run_time_ms < self.min_loop_duration_ms:
-                time.sleep((self.min_loop_duration_ms - loop_run_time_ms) / 1000)            
+                sleep_needed = (self.min_loop_duration_ms - loop_run_time_ms) \
+                               /1000
+                time.sleep(sleep_needed)            
             
     def record_initial_states(self):
         """Record the initial state but don't trigger any update"""
