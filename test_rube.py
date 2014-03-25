@@ -6,7 +6,7 @@ import unittest
 
 class TestRube(unittest.TestCase):  # pylint: disable=R0904
     """
-    TODO: Refactor out method that calls the event loop and catches interupt exception
+    This class holds all the tests
     
     """
 
@@ -54,11 +54,15 @@ class TestRube(unittest.TestCase):  # pylint: disable=R0904
         new_state = 99
         self.source.state_changes[loops_before_change] = new_state
         expected_state_log = [2, 99]
+        self.run_loop_until_interupt()
+        self.assertEquals(self.target.state_log, expected_state_log)
+
+    def run_loop_until_interupt(self): # pylint: disable=C0111
         try:
             self.controller.run_event_loop()
         except KeyboardInterrupt:
             pass
-        self.assertEquals(self.target.state_log, expected_state_log)
+        return
 
     def test_record_initial_states(self): # pylint: disable=C0111
         self.source2.state = 99
@@ -69,10 +73,7 @@ class TestRube(unittest.TestCase):  # pylint: disable=R0904
         
     def test_first_event_loop_doesnt_set_state(self): # pylint: disable=C0111, C0301, C0103
         self.source.loops_before_stop = 3
-        try:
-            self.controller.run_event_loop()
-        except KeyboardInterrupt:
-            pass
+        self.run_loop_until_interupt()
         self.assertEquals(self.target.state_log, [ ])
         
         
@@ -90,10 +91,7 @@ class TestRube(unittest.TestCase):  # pylint: disable=R0904
         self.controller = rube.RubeController(self.config, 
                                               min_loop_duration_ms=100)
         start_time = time.time()
-        try:
-            self.controller.run_event_loop()
-        except KeyboardInterrupt:
-            pass
+        self.run_loop_until_interupt()
         end_time = time.time()
         run_time = end_time - start_time
         minimum_time = 10 * 100 / 1000   #
