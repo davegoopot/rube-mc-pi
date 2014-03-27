@@ -56,10 +56,7 @@ class TestRube(unittest.TestCase):
         new_state = 99
         self.source.state_changes[loops_before_change] = new_state
         expected_state_log = [2, 99]
-        try:
-            self.controller.run_event_loop()
-        except KeyboardInterrupt:
-            pass
+        self.run_loop_until_interupt()
         self.assertEquals(self.target.state_log, expected_state_log)
 
     def test_record_initial_states(self):
@@ -69,14 +66,17 @@ class TestRube(unittest.TestCase):
         self.assertEquals(self.target.last_state_update, self.source.state)
         self.assertEquals(self.target2.last_state_update, self.source2.state)
         
-    def test_first_event_loop_doesnt_set_state(self):
-        self.source.loops_before_stop = 3
+    def run_loop_until_interupt(self):
         try:
             self.controller.run_event_loop()
         except KeyboardInterrupt:
             pass
-        self.assertEquals(self.target.state_log, [ ])
+        return
         
+    def test_first_event_loop_doesnt_set_state(self):
+        self.source.loops_before_stop = 3
+        self.assertEquals(self.target.state_log, [ ])
+        self.run_loop_until_interupt()
         
     def test_target_last_state_updated(self):
         self.controller.record_initial_states()
@@ -99,7 +99,6 @@ class TestRube(unittest.TestCase):
       "target": {
         "type": "mock",
         "name": "test1"
-        },
         }
     }
 ]
