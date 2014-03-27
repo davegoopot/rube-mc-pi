@@ -33,10 +33,11 @@ class MockSource(rube.Source):
 class MockTarget(rube.Target):
     """Stand in for a real target object.  Takes record of calls made to update
     """
-    def __init__(self):
+    def __init__(self, name=None):
         super(MockTarget, self).__init__()
         self.was_update_state_called = False
         self.state_log = []
+        self.name = name
 
     
     def update_state(self, block):

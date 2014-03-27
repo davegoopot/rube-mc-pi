@@ -104,6 +104,13 @@ class ConfigJsonParser(object):
         source.state = jsonparse[0]["source"]["state"]
         source.query_count = jsonparse[0]["source"]["query_count"]
         
-        config = [ ConfigPair(source=source, target=None), ] 
+        target_module_name = jsonparse[0]["target"]["type"] 
+        target_module = __import__(target_module_name)
+        target_class_name = target_module_name.capitalize() + "Target"
+        target_class = getattr(target_module, target_class_name)
+        target = target_class()
+        target.name = jsonparse[0]["target"]["name"]
+ 
+        config = [ ConfigPair(source=source, target=target), ] 
         
         return config   

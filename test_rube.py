@@ -97,20 +97,19 @@ class TestRube(unittest.TestCase):  # pylint: disable=R0904
         },
         
       "target": {
-        "server_address": "target_address", 
-        "server_port": 4712,
-        "x": 4,
-        "y": 5,
-        "z": 6
+        "type": "mock",
+        "name": "test1"
         }
     }
 ]
 """
         
         config = parser.parse(json)
-        expected_source = MockSource(state = 99, query_count = 200)
+        expected_source = MockSource(state=99, query_count=200)
         self.assertEquals(config[0].source.state, expected_source.state)
         self.assertEquals(config[0].source.query_count, expected_source.query_count)
+        expected_target = MockTarget(name="test1")
+        self.assertEquals(config[0].target.name, expected_target.name)
 
         
     def test_rate_limit_event_loop(self): # pylint: disable=C0111
