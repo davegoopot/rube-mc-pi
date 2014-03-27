@@ -20,7 +20,7 @@ class MockSource(rube.Source):
         self.was_poll_state_called = True
         self.query_count = self.query_count + 1
         if self.loops_before_stop != None:
-            # Need to take account of the intiall poll_state before the 1st loop
+            # Need to take account of the initial poll_state before the 1st loop
             if self.query_count > self.loops_before_stop + 1:  
                 raise KeyboardInterrupt()
 
