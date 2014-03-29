@@ -2,7 +2,6 @@
 from mock import MockSource
 from mock import MockTarget
 import rube  
-import sys
 import time
 import unittest
 
@@ -31,7 +30,7 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         self.assertTrue(self.source.was_poll_state_called)
         self.assertTrue(self.source2.was_poll_state_called)
     
-    def test_event_loop_calls_update_on_change(self): # pylint: disable=C0111, C0103
+    def test_event_loop_calls_update_on_change(self): # pylint: disable=C0111, C0103, C0301
         self.source.state = 1
         
         self.controller.update_all_once()
@@ -86,9 +85,7 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         self.assertEquals(self.target.last_state_update, 2)
         
         
-    def test_json_config_parser(self): # pylint: disable=C0111
-        parser = rube.ConfigJsonParser()
-             
+    def test_json_config_parser(self): # pylint: disable=C0111          
         json = """
 [
      { "source": {
@@ -104,13 +101,59 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
     }
 ]
 """
+        parser = rube.ConfigJsonParser()
         config = parser.parse(json)
         expected_source = MockSource(state=99, query_count=200)
         self.assertEquals(config[0].source.state, expected_source.state)
-        self.assertEquals(config[0].source.query_count, expected_source.query_count)
+        self.assertEquals(config[0].source.query_count,
+                          expected_source.query_count)
         expected_target = MockTarget(name="test1")
         self.assertEquals(config[0].target.name, expected_target.name)
 
+        
+    def test_config_two_pairs(self): # pylint: disable=C0111
+        json = """
+[
+     { "source": {
+        "type": "mock",
+        "state": 99,
+        "query_count": 200
+        },
+        
+      "target": {
+        "type": "mock",
+        "name": "test1"
+        }
+    }
+,
+	{ "source": {
+        "type": "mock",
+        "state": 199,
+        "query_count": 300
+        },
+        
+      "target": {
+        "type": "mock",
+        "name": "test2"
+        }
+    }
+]
+"""	
+        parser = rube.ConfigJsonParser()
+        config = parser.parse(json)
+        expected_source1 = MockSource(state=99, query_count=200)
+        self.assertEquals(config[0].source.state, expected_source1.state)
+        self.assertEquals(config[0].source.query_count,
+                          expected_source1.query_count)
+        expected_target1 = MockTarget(name="test1")
+        self.assertEquals(config[0].target.name, expected_target1.name)
+
+        expected_source2 = MockSource(state=199, query_count=300)
+        self.assertEquals(config[1].source.state, expected_source2.state)
+        self.assertEquals(config[1].source.query_count,
+                          expected_source2.query_count)
+        expected_target2 = MockTarget(name="test2")
+        self.assertEquals(config[1].target.name, expected_target2.name)
         
     def test_rate_limit_event_loop(self): # pylint: disable=C0111
         self.source = MockSource()

@@ -93,24 +93,24 @@ class ConfigJsonParser(object):
     
     def parse(self, json_string):
         """Take the json and return (source, target) pairs ready for use"""
-       
-        
+
+        config = [ ]
         jsonparse = json.loads(json_string)
-        source_module_name = jsonparse[0]["source"]["type"] 
-        source_module = __import__(source_module_name)
-        source_class_name = source_module_name.capitalize() + "Source"
-        source_class = getattr(source_module, source_class_name)
-        source = source_class()
-        source.state = jsonparse[0]["source"]["state"]
-        source.query_count = jsonparse[0]["source"]["query_count"]
-        
-        target_module_name = jsonparse[0]["target"]["type"] 
-        target_module = __import__(target_module_name)
-        target_class_name = target_module_name.capitalize() + "Target"
-        target_class = getattr(target_module, target_class_name)
-        target = target_class()
-        target.name = jsonparse[0]["target"]["name"]
- 
-        config = [ ConfigPair(source=source, target=target), ] 
+        for config_pair in jsonparse:
+            source_module_name = config_pair["source"]["type"] 
+            source_module = __import__(source_module_name)
+            source_class_name = source_module_name.capitalize() + "Source"
+            source_class = getattr(source_module, source_class_name)
+            source = source_class()
+            source.state = config_pair["source"]["state"]
+            source.query_count = config_pair["source"]["query_count"]
+            
+            target_module_name = config_pair["target"]["type"] 
+            target_module = __import__(target_module_name)
+            target_class_name = target_module_name.capitalize() + "Target"
+            target_class = getattr(target_module, target_class_name)
+            target = target_class()
+            target.name = config_pair["target"]["name"]
+            config.append(ConfigPair(source=source, target=target))
         
         return config   
