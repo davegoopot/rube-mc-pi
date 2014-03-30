@@ -8,7 +8,7 @@ from mcpi.minecraft import Minecraft
 import rube
 
 
-MinecraftCoordinates = collections.namedtuple("MinecraftCoordinates", "x y z") # pylint: disable-msg=C0103, C0301
+MinecraftCoordinates = collections.namedtuple("MinecraftCoordinates", "x y z") # pylint: disable=C0103, C0301
 
 class MinecraftSource(rube.Source):
     """Monitor a minecraft server for the block state at given coordinates"""

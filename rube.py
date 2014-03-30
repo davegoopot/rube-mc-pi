@@ -83,7 +83,7 @@ class Target(object):
 
             
 
-ConfigPair = collections.namedtuple("ConfigPair", "source target") # pylint: disable-msg=C0103, C0301
+ConfigPair = collections.namedtuple("ConfigPair", "source target") # pylint: disable=C0103, C0301
             
 class ConfigJsonParser(object):
     """Responsible for reading in JSON config and converting it to a config
