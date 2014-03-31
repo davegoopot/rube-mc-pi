@@ -100,8 +100,8 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
     }
 ]
 """
-        parser = rube.ConfigJsonParser()
-        config = parser.parse(json)
+        
+        config = rube.ConfigJsonParser.parse(json)
         expected_source = MockSource(state=99, query_count=200)
         self.assertEquals(config[0].source.state, expected_source.state)
         self.assertEquals(config[0].source.query_count,
@@ -138,8 +138,7 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
     }
 ]
 """	
-        parser = rube.ConfigJsonParser()
-        config = parser.parse(json)
+        config = rube.ConfigJsonParser.parse(json)
         expected_source1 = MockSource(state=99, query_count=200)
         self.assertEquals(config[0].source.state, expected_source1.state)
         self.assertEquals(config[0].source.query_count,

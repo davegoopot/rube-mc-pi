@@ -91,13 +91,15 @@ class ConfigJsonParser(object):
     
     """
     
-    def make_instance(self, module_name, type, attribute_dict):
-        """Try to load the module of the given name, find a class in that module of 
-        type module_nametype, e.g. ExampleSource, and then return a new instance
-        with all the attributes set as per the passed dictionary
+    @staticmethod
+    def make_instance(module_name, type_, attribute_dict):
+        """Try to load the module of the given name, find a class in 
+        that module of type module_nametype, e.g. ExampleSource, and
+        then return a new instance with all the attributes set 
+        as per the passed dictionary
         """
         module = __import__(module_name)
-        class_name = module_name.capitalize() + type.capitalize()
+        class_name = module_name.capitalize() + type_.capitalize()
         class_ = getattr(module, class_name)
         instance = class_()
         for (attrib, value) in attribute_dict:
@@ -106,24 +108,26 @@ class ConfigJsonParser(object):
         return instance
         
         
-    
-    def parse(self, json_string):
+    @staticmethod
+    def parse(json_string):
         """Take the json and return (source, target) pairs ready for use"""
 
-        config = [ ]
+        config = []
         jsonparse = json.loads(json_string)
-        for config_pair in jsonparse:            
-            source = self.make_instance(config_pair["source"]["type"],
-                                        "Source", 
-                                         (("state", config_pair["source"]["state"]),
-                                          ("query_count", config_pair["source"]["query_count"])
-                                         ))
+        for config_pair in jsonparse:          
+            source = ConfigJsonParser.make_instance(
+                         config_pair["source"]["type"],
+                         "Source", 
+                         (("state", config_pair["source"]["state"]),
+                          ("query_count", config_pair["source"]["query_count"])
+                         ))
             
-            target = self.make_instance(config_pair["target"]["type"],
-                                        "Target", 
-                                         (("name", config_pair["target"]["name"]),
-                                          ("query_count", config_pair["source"]["query_count"])
-                                         ))
+            target = ConfigJsonParser.make_instance(
+                        config_pair["target"]["type"],
+                        "Target", 
+                         (("name", config_pair["target"]["name"]),
+                          ("query_count", config_pair["source"]["query_count"])
+                         ))
             
             
             config.append(ConfigPair(source=source, target=target))
