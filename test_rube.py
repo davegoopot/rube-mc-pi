@@ -9,7 +9,6 @@ import unittest
 class TestRube(unittest.TestCase): # pylint: disable=R0904
     """
     TODO:  Plugin loader from plugins directory
-    TODO:  Config to load MockPlugin
     TODO:  Test can load Minecraft plugin with appropriate attributes
     """
     def setUp(self):  # pylint: disable=C0103 
