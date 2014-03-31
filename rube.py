@@ -92,7 +92,7 @@ class ConfigJsonParser(object):
     """
     
     @staticmethod
-    def make_instance(module_name, type_, attribute_dict):
+    def make_instance(module_name, type_, attribute_list):
         """Try to load the module of the given name, find a class in 
         that module of type module_nametype, e.g. ExampleSource, and
         then return a new instance with all the attributes set 
@@ -102,7 +102,7 @@ class ConfigJsonParser(object):
         class_name = module_name.capitalize() + type_.capitalize()
         class_ = getattr(module, class_name)
         instance = class_()
-        for (attrib, value) in attribute_dict:
+        for (attrib, value) in attribute_list:
             setattr(instance, attrib, value)
         
         return instance
@@ -117,17 +117,19 @@ class ConfigJsonParser(object):
         for config_pair in jsonparse:          
             source = ConfigJsonParser.make_instance(
                          config_pair["source"]["type"],
-                         "Source", 
-                         (("state", config_pair["source"]["state"]),
-                          ("query_count", config_pair["source"]["query_count"])
-                         ))
+                         "Source",
+                         [(name, value) for (name, value) 
+                            in config_pair["source"].items() 
+                            if name != "type"]
+                         )
             
             target = ConfigJsonParser.make_instance(
                         config_pair["target"]["type"],
-                        "Target", 
-                         (("name", config_pair["target"]["name"]),
-                          ("query_count", config_pair["source"]["query_count"])
-                         ))
+                        "Target",
+                        [(name, value) for (name, value)
+                            in config_pair["target"].items()
+                            if name != "type"]
+                        )
             
             
             config.append(ConfigPair(source=source, target=target))

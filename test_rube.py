@@ -1,6 +1,7 @@
 """Unit testing module for the whole Rube Goldberg code project"""
 from mock import MockSource
 from mock import MockTarget
+import mock2
 import rube  
 import time
 import unittest
@@ -165,6 +166,37 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         run_time = end_time - start_time
         minimum_time = 10 * 100 / 1000   #
         self.assertGreater(run_time, minimum_time)
+
+    def test_second_mock_json_parser(self): # pylint: disable=C0111
+        """Tests that given a dictionary with specific attributes
+        the parser sets the values as expected.
+        """
+        
+        attribute_list = (("attrib1", 1), ("attrib2", "test"))
+        
+        source_instance = rube.ConfigJsonParser.make_instance(
+                                                "mock2",
+                                                "Source",
+                                                 attribute_list)
+                                                 
+        self.assertIsInstance(source_instance, mock2.Mock2Source)
+        self.assertEqual(source_instance.attrib1, 1)
+        self.assertEqual(source_instance.attrib2, "test")
+        
+        attribute_list = (("attrib1", 2),
+                          ("attrib2", "test2"), 
+                          ("attrib3", "test3"))
+        target_instance = rube.ConfigJsonParser.make_instance(
+                                                "mock2",
+                                                "Target",
+                                                 attribute_list)
+                                                 
+        self.assertIsInstance(target_instance, mock2.Mock2Target)
+        self.assertEqual(target_instance.attrib1, 2)
+        self.assertEqual(target_instance.attrib2, "test2")
+        self.assertEqual(target_instance.attrib3, "test3")        
+        
+
 
 
     # def test_plugin_loader(self):
