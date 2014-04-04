@@ -92,7 +92,7 @@ class ConfigJsonParser(object):
     """
     
     @staticmethod
-    def make_instance(module_name, type_, attribute_list):
+    def make_instance(module_name, type_, attribute_dict):
         """Try to load the module of the given name, find a class in 
         that module of type module_nametype, e.g. ExampleSource, and
         then return a new instance with all the attributes set 
@@ -101,9 +101,7 @@ class ConfigJsonParser(object):
         module = __import__(module_name)
         class_name = module_name.capitalize() + type_.capitalize()
         class_ = getattr(module, class_name)
-        instance = class_()
-        for (attrib, value) in attribute_list:
-            setattr(instance, attrib, value)
+        instance = class_(**attribute_dict)
         
         return instance
         
@@ -118,17 +116,17 @@ class ConfigJsonParser(object):
             source = ConfigJsonParser.make_instance(
                          config_pair["source"]["type"],
                          "Source",
-                         [(name, value) for (name, value) 
+                         {name: value for (name, value) 
                             in config_pair["source"].items() 
-                            if name != "type"]
+                            if name != "type"}
                          )
             
             target = ConfigJsonParser.make_instance(
                         config_pair["target"]["type"],
                         "Target",
-                        [(name, value) for (name, value)
+                        {name: value for (name, value)
                             in config_pair["target"].items()
-                            if name != "type"]
+                            if name != "type"}
                         )
             
             

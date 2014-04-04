@@ -11,11 +11,12 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
     """
     TODO:  Test can load Minecraft plugin with appropriate attributes
     """
-    def setUp(self):  # pylint: disable=C0103 
-        self.source = MockSource()
-        self.target = MockTarget()
-        self.source2 = MockSource()
-        self.target2 = MockTarget()
+    def setUp(self):  # pylint: disable=C0103
+        nullkwargs = {}
+        self.source = MockSource(**nullkwargs)
+        self.target = MockTarget(**nullkwargs)
+        self.source2 = MockSource(**nullkwargs)
+        self.target2 = MockTarget(**nullkwargs)
         self.config = [(self.source, self.target), (self.source2, self.target2)]
         self.controller = rube.RubeController(self.config, 
                                               min_loop_duration_ms = 1)
@@ -103,6 +104,8 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         
         config = rube.ConfigJsonParser.parse(json)
         expected_source = MockSource(state=99, query_count=200)
+        self.assertTrue(config[0].source.was_constructor_called)
+        self.assertTrue(config[0].target.was_constructor_called)
         self.assertEquals(config[0].source.state, expected_source.state)
         self.assertEquals(config[0].source.query_count,
                           expected_source.query_count)
@@ -171,7 +174,7 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         the parser sets the values as expected.
         """
         
-        attribute_list = (("attrib1", 1), ("attrib2", "test"))
+        attribute_list = {"attrib1": 1, "attrib2": "test"}
         
         source_instance = rube.ConfigJsonParser.make_instance(
                                                 "mock2",
@@ -182,9 +185,9 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         self.assertEqual(source_instance.attrib1, 1)
         self.assertEqual(source_instance.attrib2, "test")
         
-        attribute_list = (("attrib1", 2),
-                          ("attrib2", "test2"), 
-                          ("attrib3", "test3"))
+        attribute_list = {"attrib1": 2,
+                          "attrib2": "test2", 
+                          "attrib3": "test3"}
         target_instance = rube.ConfigJsonParser.make_instance(
                                                 "mock2",
                                                 "Target",
