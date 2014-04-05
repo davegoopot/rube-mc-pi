@@ -92,6 +92,23 @@ class ConfigJsonParser(object):
     """
     
     @staticmethod
+    def make_instance_from_dict(attrib_dict, source_or_target):
+        """Build the objects based on the passed 
+        dictionary of attributes.
+        The 'type' attribute defines which class of object to load
+        
+        """
+        type_ = attrib_dict["type"]
+        core_attribs = {name: value for (name, value) 
+                            in attrib_dict.items() 
+                            if name != "type"}
+        
+        return ConfigJsonParser.make_instance(type_,
+                                              source_or_target,
+                                              core_attribs)
+    
+    
+    @staticmethod
     def make_instance(module_name, type_, attribute_dict):
         """Try to load the module of the given name, find a class in 
         that module of type module_nametype, e.g. ExampleSource, and
@@ -113,23 +130,9 @@ class ConfigJsonParser(object):
         config = []
         jsonparse = json.loads(json_string)
         for config_pair in jsonparse:          
-            source = ConfigJsonParser.make_instance(
-                         config_pair["source"]["type"],
-                         "Source",
-                         {name: value for (name, value) 
-                            in config_pair["source"].items() 
-                            if name != "type"}
-                         )
-            
-            target = ConfigJsonParser.make_instance(
-                        config_pair["target"]["type"],
-                        "Target",
-                        {name: value for (name, value)
-                            in config_pair["target"].items()
-                            if name != "type"}
-                        )
-            
-            
+            source = ConfigJsonParser.make_instance_from_dict(config_pair["source"], "source")
+            target = ConfigJsonParser.make_instance_from_dict(config_pair["target"], "target")
             config.append(ConfigPair(source=source, target=target))
         
         return config   
+        
