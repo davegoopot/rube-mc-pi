@@ -12,11 +12,11 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
     TODO:  Test can load Minecraft plugin with appropriate attributes
     """
     def setUp(self):  # pylint: disable=C0103
-        nullkwargs = {}
-        self.source = MockSource(**nullkwargs)
-        self.target = MockTarget(**nullkwargs)
-        self.source2 = MockSource(**nullkwargs)
-        self.target2 = MockTarget(**nullkwargs)
+        nullattribs = {}
+        self.source = MockSource(nullattribs)
+        self.target = MockTarget(nullattribs)
+        self.source2 = MockSource(nullattribs)
+        self.target2 = MockTarget(nullattribs)
         self.config = [(self.source, self.target), (self.source2, self.target2)]
         self.controller = rube.RubeController(self.config, 
                                               min_loop_duration_ms = 1)
@@ -103,13 +103,13 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
 """
         
         config = rube.ConfigJsonParser.parse(json)
-        expected_source = MockSource(state=99, query_count=200)
+        expected_source = MockSource({"state":99, "query_count": 200})
         self.assertTrue(config[0].source.was_constructor_called)
         self.assertTrue(config[0].target.was_constructor_called)
         self.assertEquals(config[0].source.state, expected_source.state)
         self.assertEquals(config[0].source.query_count,
                           expected_source.query_count)
-        expected_target = MockTarget(name="test1")
+        expected_target = MockTarget({"name": "test1"})
         self.assertEquals(config[0].target.name, expected_target.name)
 
         
@@ -142,22 +142,22 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
 ]
 """	
         config = rube.ConfigJsonParser.parse(json)
-        expected_source1 = MockSource(state=99, query_count=200)
+        expected_source1 = MockSource({"state": 99, "query_count": 200})
         self.assertEquals(config[0].source.state, expected_source1.state)
         self.assertEquals(config[0].source.query_count,
                           expected_source1.query_count)
-        expected_target1 = MockTarget(name="test1")
+        expected_target1 = MockTarget({"name": "test1"})
         self.assertEquals(config[0].target.name, expected_target1.name)
 
-        expected_source2 = MockSource(state=199, query_count=300)
+        expected_source2 = MockSource({"state": 199, "query_count": 300})
         self.assertEquals(config[1].source.state, expected_source2.state)
         self.assertEquals(config[1].source.query_count,
                           expected_source2.query_count)
-        expected_target2 = MockTarget(name="test2")
+        expected_target2 = MockTarget({"name": "test2"})
         self.assertEquals(config[1].target.name, expected_target2.name)
         
     def test_rate_limit_event_loop(self): # pylint: disable=C0111
-        self.source = MockSource()
+        self.source = MockSource({})
         self.source.loops_before_stop = 10
         self.config = [ (self.source, self.target), ]
         self.controller = rube.RubeController(self.config, 
