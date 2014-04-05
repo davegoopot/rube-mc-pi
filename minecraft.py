@@ -25,11 +25,11 @@ class MinecraftSource(rube.Source): #pylint: disable=R0903
 
     def poll_state(self):
         """Return the block value from the connected Minecraft server"""
-        block = self.world_connection.getBlock(self.coords_x,
+        block_ = self.world_connection.getBlock(self.coords_x,
                                                self.coords_y,
                                                self.coords_z)
-        print "Got " + str(block)
-        return block
+        print "Got " + str(block_)
+        return block_
 
 class MinecraftTarget(rube.Target): #pylint: disable=R0903
     """Set the block on the server to the specified value"""
@@ -43,11 +43,11 @@ class MinecraftTarget(rube.Target): #pylint: disable=R0903
         self.world_connection = Minecraft.create(self.server_address,
                                                  self.server_port)
 
-    def update_state(self, block):
+    def update_state(self, block_):
         self.world_connection.setBlock(self.coords_x,
                                        self.coords_y,
                                        self.coords_z,
-                                       block)
+                                       block_)
 
 
 if __name__ == "__main__":

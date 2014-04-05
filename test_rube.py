@@ -8,8 +8,7 @@ import unittest
 
 
 class TestRube(unittest.TestCase): # pylint: disable=R0904
-    """
-    TODO:  Test can load Minecraft plugin with appropriate attributes
+    """ All the unittests for the rube and associated modules
     """
     def setUp(self):  # pylint: disable=C0103
         nullattribs = {}

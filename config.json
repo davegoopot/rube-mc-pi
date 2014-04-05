@@ -1,0 +1,19 @@
+[
+     { "source": {
+        "type": "minecraft",
+        "coords_x": 1,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        },
+        
+      "target":  {
+        "type": "minecraft",
+        "coords_x": 2,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        }
+    }
+    
+]
