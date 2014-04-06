@@ -210,8 +210,8 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         try:
             file_target.update_state(block)
             self.assertTrue(os.path.exists("test"))
-            with open("test", "r") as f:
-                contents = f.read()
+            with open("test", "r") as file_:
+                contents = file_.read()
             self.assertEquals("123,46", contents)
         finally:
             if (os.path.exists("test")):
@@ -222,8 +222,8 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         self.assertEquals("test", file_source.file_name)
         
         try:
-            with open("test", "w") as f:
-                f.write("234,56")
+            with open("test", "w") as file_:
+                file_.write("234,56")
                 
             state = file_source.poll_state()
             self.assertEquals(234, state.id)

@@ -3,7 +3,6 @@ Adaptor for communicating status to and from a file.  The file format is a
 single line in a file with id,data,  e.g. 123,45
 """
 
-import file
 from mcpi.block import Block
 import rube
 
@@ -14,8 +13,8 @@ class FileTarget(rube.Target): #pylint: disable=R0903
         self.file_name = attribs["file_name"]
         
     def update_state(self, block_):
-        with open(self.file_name, "w") as f:
-            f.write("%s,%s" % (block_.id, block_.data))
+        with open(self.file_name, "w") as file_:
+            file_.write("%s,%s" % (block_.id, block_.data))
 
 class FileSource(rube.Source): #pylint: disable=R0903
     """Check the status by reading the file"""
@@ -24,7 +23,7 @@ class FileSource(rube.Source): #pylint: disable=R0903
         self.file_name = attribs["file_name"]
         
     def poll_state(self):
-        with open(self.file_name, "r") as f:
-            contents = f.read()
+        with open(self.file_name, "r") as file_:
+            contents = file_.read()
         parsed = contents.split(",")
         return Block(id=int(parsed[0]), data=int(parsed[1]))
