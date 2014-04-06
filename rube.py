@@ -137,3 +137,11 @@ class ConfigJsonParser(object):
 
         return config
 
+if __name__ == "__main__":
+    JSON_CONFIG = ""
+    with open("config.json", "r") as f:
+        JSON_CONFIG = f.read()
+    
+    CONFIG = ConfigJsonParser.parse(JSON_CONFIG)
+    CONTROLLER = RubeController(CONFIG)
+    CONTROLLER.run_event_loop()
