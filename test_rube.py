@@ -1,4 +1,5 @@
 """Unit testing module for the whole Rube Goldberg code project"""
+from file import FileSource
 from file import FileTarget
 from mcpi.block import Block
 from mock import MockSource
@@ -215,3 +216,19 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         finally:
             if (os.path.exists("test")):
                 os.unlink("test")
+
+    def test_file_plugin_source(self): # pylint: disable=C0111
+        file_source = FileSource({"file_name": "test"})
+        self.assertEquals("test", file_source.file_name)
+        
+        try:
+            with open("test", "w") as f:
+                f.write("234,56")
+                
+            state = file_source.poll_state()
+            self.assertEquals(234, state.id)
+            self.assertEquals(56, state.data)
+        finally:
+            if (os.path.exists("test")):
+                os.unlink("test")
+            

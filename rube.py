@@ -58,7 +58,7 @@ class Source(object): #pylint: disable=R0903
         """Ask a source component for its current state"""
         raise NotImplementedError(
         "It is for concrete implementations of this class to fill in the" \
-        "poll_state() method.")
+        " poll_state() method.")
 
 
 class Target(object): #pylint: disable=R0903
