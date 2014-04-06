@@ -1,7 +1,10 @@
 """Unit testing module for the whole Rube Goldberg code project"""
+from file import FileTarget
+from mcpi.block import Block
 from mock import MockSource
 from mock import MockTarget
 import mock2
+import os.path
 import rube  
 import time
 import unittest
@@ -197,11 +200,18 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         self.assertEqual(target_instance.attrib2, "test2")
         self.assertEqual(target_instance.attrib3, "test3")        
         
-
-
-
-    # def test_plugin_loader(self):
-        # plugin_loader = rube.PluginLoader()
-        # plugin_loader.load_from_plugin_dir()
-        # self.assertTrue("testplugin" in sys.modules.keys())
-    
+    def test_file_plugin_target(self): # pylint: disable=C0111
+        file_target = FileTarget({"file_name": "test"})
+        self.assertEquals("test", file_target.file_name)
+        
+        self.assertFalse(os.path.exists("test"))
+        block = Block(id=123, data=46)
+        try:
+            file_target.update_state(block)
+            self.assertTrue(os.path.exists("test"))
+            with open("test", "r") as f:
+                contents = f.read()
+            self.assertEquals("123,46", contents)
+        finally:
+            if (os.path.exists("test")):
+                os.unlink("test")
