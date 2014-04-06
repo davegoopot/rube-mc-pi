@@ -14,6 +14,24 @@
         "coords_z": 3,
         "server_address": "localhost"
         }
+    },
+    { "source": {
+        "type": "minecraft",
+        "coords_x": 2,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        },
+        
+      "target":  {
+        "type": "minecraft",
+        "coords_x": 3,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        }
     }
+        
+    
     
 ]
