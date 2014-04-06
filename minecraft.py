@@ -9,8 +9,6 @@ import mcpi.block as block
 import rube
 
 
-MinecraftCoordinates = collections.namedtuple("MinecraftCoordinates", "x y z") # pylint: disable=C0103, C0301
-
 class MinecraftSource(rube.Source): #pylint: disable=R0903
     """Monitor a minecraft server for the block state at given coordinates"""
     def __init__(self, attribs):
