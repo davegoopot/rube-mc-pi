@@ -1,12 +1,15 @@
 """Unit testing module for the whole Rube Goldberg code project"""
 from file import FileSource
 from file import FileTarget
+from http import HttpSource
+import http
 from mcpi.block import Block
 from mock import MockSource
 from mock import MockTarget
 import mock2
 import os.path
 import rube  
+import StringIO
 import time
 import unittest
 
@@ -231,4 +234,17 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         finally:
             if (os.path.exists("test")):
                 os.unlink("test")
-            
+
+    def mock_urlopen(self, url):
+        return StringIO.StringIO("1,2")
+                
+    def test_http_plugin_source(self): # pylint: disable=C0111
+        http_source = HttpSource({"address": "http://localhost/"})
+        self.assertEquals("http://localhost/", http_source.address)
+        http.urllib2.urlopen = self.mock_urlopen
+        
+        result = http_source.poll_state()
+        self.assertEquals(result.id, 1)
+        self.assertEquals(result.data, 2)
+        
+        
