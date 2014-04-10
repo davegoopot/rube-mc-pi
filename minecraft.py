@@ -3,7 +3,6 @@ Adaptor for minecraft using Bukkit and the Raspberry Juice plugin
 
 """
 
-import collections
 from mcpi.minecraft import Minecraft
 import mcpi.block as block
 import rube
@@ -36,7 +35,7 @@ class MinecraftTarget(rube.Target): #pylint: disable=R0903
                                                block_)
 
                                        
-class MinecraftLink(object):
+class MinecraftLink(object):   #pylint: disable=R0903
     """
     Responsible for storing the state of the link to a server and the location
     of the block that is to be monitored or updated.
@@ -49,8 +48,8 @@ class MinecraftLink(object):
         self.coords_y = attribs["coords_y"]
         self.coords_z = attribs["coords_z"]
         self.world_connection = Minecraft.create(self.server_address,
-                                                 self.server_port)                                       
-                                       
+                                              self.server_port)
+                                              
 if __name__ == "__main__":
     JSON_CONFIG = ""
     with open("config.json", "r") as f:

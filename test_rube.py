@@ -234,17 +234,21 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         finally:
             if (os.path.exists("test")):
                 os.unlink("test")
-
-    def mock_urlopen(self, url):
-        return StringIO.StringIO("1,2")
                 
     def test_http_plugin_source(self): # pylint: disable=C0111
         http_source = HttpSource({"address": "http://localhost/"})
         self.assertEquals("http://localhost/", http_source.address)
-        http.urllib2.urlopen = self.mock_urlopen
+        http.urllib2.urlopen = mock_urlopen
         
         result = http_source.poll_state()
         self.assertEquals(result.id, 1)
         self.assertEquals(result.data, 2)
         
+        
+
+def mock_urlopen(url):
+    """Used for monkey patch the URL openner 
+    for the unit tests of http plugin"""
+    return StringIO.StringIO("1,2")
+
         
