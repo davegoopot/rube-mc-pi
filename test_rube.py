@@ -240,7 +240,7 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
         "type": "gpio",
         "pin": 18,
         "low_state_block": [0, 0],
-        "high_state_block": [45, 0]
+        "high_state_block": [45, 2]
         },
         
       "target": {
@@ -250,10 +250,33 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
     }
 ]
 """
-        
+        gpio.GpioSource.gpio_in_setup = mock_pin_setup 
         config = rube.ConfigJsonParser.parse(json)
         source = config[0].source
         self.assertEquals(source.pin, 18)
         self.assertEquals(source.low_state_block, Block(0, 0))
-        self.assertEquals(source.high_state_block, Block(45, 0))
-        
+        self.assertEquals(source.high_state_block, Block(45, 2))
+
+        gpio.GPIO.input = mock_gpio_pin_high
+        state = source.poll_state()
+        self.assertEquals(45, state.id)
+        self.assertEquals(2, state.data)
+
+        gpio.GPIO.input = mock_gpio_pin_low
+        state = source.poll_state()
+        self.assertEquals(0, state.id)
+        self.assertEquals(0, state.data)
+		
+		
+@staticmethod
+def mock_pin_setup(pin):
+    """For monkey patching"""
+    pass
+	
+def mock_gpio_pin_high(pin):
+    """For monkey patching"""
+    return True
+    
+def mock_gpio_pin_low(pin):
+    """For monkey patching"""
+    return False

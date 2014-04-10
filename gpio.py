@@ -25,13 +25,15 @@ import rube
 
 class GpioSource(rube.Source): #pylint: disable=R0903
     """
-        Use the input from the raspberry pi GPIO pin 
+        Use the input from the raspberry pi GPIO pin.
+		The low_state_block is the block to report if the pin in low
+		The high_state_block is what to report if the pin is high
     """
     
     @staticmethod
     def gpio_in_setup(pin):
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     
     def __init__(self, attribs):
@@ -39,8 +41,11 @@ class GpioSource(rube.Source): #pylint: disable=R0903
         self.pin = attribs["pin"]
         self.low_state_block = Block(attribs["low_state_block"][0], attribs["low_state_block"][1])
         self.high_state_block = Block(attribs["high_state_block"][0], attribs["high_state_block"][1])
-        gpio_in_setup(self.pin)
+        GpioSource.gpio_in_setup(self.pin)
 
     def poll_state(self):
-        pass
+        if GPIO.input(self.pin):
+            return self.high_state_block
+        else:
+            return self.low_state_block
 
