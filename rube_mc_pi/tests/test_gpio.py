@@ -6,7 +6,7 @@ import rube_mc_pi.rube as rube
 import unittest
 
 try:
-    import rube_mc_pi.gpio as gpio
+    import RPi.GPIO as gpio
     #Only go ahead if gpio is available
 
     class TestGpio(unittest.TestCase): # pylint: disable=R0904
