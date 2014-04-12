@@ -32,6 +32,7 @@ class GpioSource(rube.Source): #pylint: disable=R0903
     
     @staticmethod
     def gpio_in_setup(pin):
+        """Set the pin up for input"""
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
