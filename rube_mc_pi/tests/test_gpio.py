@@ -40,13 +40,13 @@ try:
 
             gpio.GPIO.input = mock_gpio_pin_high
             state = source.poll_state()
-            self.assertEquals(45, state.id)
-            self.assertEquals(2, state.data)
+            self.assertEquals(0, state.id)
+            self.assertEquals(0, state.data)
 
             gpio.GPIO.input = mock_gpio_pin_low
             state = source.poll_state()
-            self.assertEquals(0, state.id)
-            self.assertEquals(0, state.data)
+            self.assertEquals(45, state.id)
+            self.assertEquals(2, state.data)
 
         def test_gpio_plugin_target(self): # pylint: disable=C0111
             json = """

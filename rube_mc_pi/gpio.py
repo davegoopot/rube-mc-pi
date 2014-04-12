@@ -47,9 +47,9 @@ class GpioSource(rube.Source): #pylint: disable=R0903
 
     def poll_state(self):
         if GPIO.input(self.pin):
-            return self.high_state_block
-        else:
             return self.low_state_block
+        else:
+            return self.high_state_block
 
 class GpioTarget(rube.Target): #pylint: disable=R0903
     """
