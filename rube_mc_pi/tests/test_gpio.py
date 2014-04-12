@@ -2,11 +2,11 @@
 
 
 from mcpi.block import Block
-import rube
+import rube_mc_pi.rube as rube
 import unittest
 
 try:
-    import gpio
+    import rube_mc_pi.gpio as gpio
     #Only go ahead if gpio is available
 
     class TestGpio(unittest.TestCase): # pylint: disable=R0904

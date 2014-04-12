@@ -1,12 +1,13 @@
 """Unit testing module for the whole Rube Goldberg code project"""
-from file import FileSource
-from file import FileTarget
 from mcpi.block import Block
-from mock import MockSource
-from mock import MockTarget
-import mock2
+from rube_mc_pi import *
+from rube_mc_pi.mock import MockSource
+from rube_mc_pi.mock import MockTarget
+import rube_mc_pi.mock2 as mock2
 import os.path
-import rube  
+from rube_mc_pi.file import FileSource
+from rube_mc_pi.file import FileTarget
+import rube_mc_pi.rube as rube
 import time
 import unittest
 
