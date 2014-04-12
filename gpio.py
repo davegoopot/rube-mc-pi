@@ -59,6 +59,7 @@ class GpioTarget(rube.Target): #pylint: disable=R0903
     
     @staticmethod
     def gpio_out_setup(pin):
+        """Set GPIO up for output and initialise it to low"""
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(pin, GPIO.OUT)
         GPIO.output(pin, GPIO.LOW)

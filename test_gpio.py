@@ -49,8 +49,8 @@ try:
             self.assertEquals(0, state.data)
 		
 
-except ImportError, e:
-    if e.message.find("RPi.GPIO") >= 0:
+except ImportError, ex:
+    if ex.message.find("RPi.GPIO") >= 0:
         print "Can't import RPi.GPIO; skipping gpio tests"
     else:
         raise
