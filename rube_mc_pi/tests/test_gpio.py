@@ -1,7 +1,7 @@
 """Unit testing for the GPIO plugin -- this will only run on a Raspberry Pi"""
 
 
-from mcpi.block import Block
+from rube_mc_pi.mcpi.block import Block
 import rube_mc_pi.rube as rube
 import unittest
 

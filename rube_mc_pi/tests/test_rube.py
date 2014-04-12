@@ -1,5 +1,5 @@
 """Unit testing module for the whole Rube Goldberg code project"""
-from mcpi.block import Block
+from rube_mc_pi.mcpi.block import Block
 from rube_mc_pi import *
 from rube_mc_pi.mock import MockSource
 from rube_mc_pi.mock import MockTarget
