@@ -47,10 +47,32 @@ try:
             state = source.poll_state()
             self.assertEquals(0, state.id)
             self.assertEquals(0, state.data)
+
+        def test_gpio_plugin_target(self): # pylint: disable=C0111
+            json = """
+    [
+         { "source": {
+            "type": "mock",
+            "name": "test"
+            },
+        
+          "target": {
+            "type": "gpio",
+            "pin": 12
+            }
+        }
+    ]
+    """
+            gpio.GpioTarget.gpio_out_setup = mock_pin_setup 
+            config = rube.ConfigJsonParser.parse(json)
+            target = config[0].target
+            self.assertEquals(target.pin, 12)
+            
+            
 		
 
-except ImportError, e:
-    if e.message.find("RPi.GPIO") >= 0:
+except ImportError, ex:
+    if ex.message.find("RPi.GPIO") >= 0:
         print "Can't import RPi.GPIO; skipping gpio tests"
     else:
         raise

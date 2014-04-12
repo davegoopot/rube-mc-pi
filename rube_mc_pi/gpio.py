@@ -17,6 +17,7 @@ The JSON config looks like this:
     }
 """
 
+from mcpi import block
 from mcpi.block import Block
 import RPi.GPIO as GPIO
 import rube
@@ -50,3 +51,27 @@ class GpioSource(rube.Source): #pylint: disable=R0903
         else:
             return self.low_state_block
 
+class GpioTarget(rube.Target): #pylint: disable=R0903
+    """
+        Simply if the state pass is Block.AIR (0,0) the turn output low.
+        Any other block type put the output high
+    """
+    
+    @staticmethod
+    def gpio_out_setup(pin):
+        """Set GPIO up for output and initialise it to low"""
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, GPIO.LOW)
+        
+        
+    def __init__(self, attribs):
+        super(GpioTarget, self).__init__()
+        self.pin = attribs["pin"]
+        GpioTarget.gpio_out_setup(self.pin)
+
+    def update_state(self, new_state):
+        if new_state == block.AIR:
+            GPIO.output(self.pin, GPIO.LOW)
+        else:
+            GPIO.output(self.pin, GPIO.HIGH)
