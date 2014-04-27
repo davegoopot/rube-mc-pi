@@ -1,6 +1,25 @@
 """
 Adaptor for minecraft using Bukkit and the Raspberry Juice plugin
 
+The JSON looks like this:
+
+{ "source": {
+        "type": "minecraft",
+        "coords_x": 1,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        },
+        
+      "target":  {
+        "type": "minecraft",
+        "coords_x": 2,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        }
+
+
 """
 
 import collections
@@ -20,7 +39,7 @@ class MinecraftSource(rube.Source): #pylint: disable=R0903
         block_ = self.mc_link.world_connection.getBlock(self.mc_link.coords_x,
                                                         self.mc_link.coords_y,
                                                         self.mc_link.coords_z)
-        print "Got " + str(block_)
+        
         return block_
 
 class MinecraftTarget(rube.Target): #pylint: disable=R0903
