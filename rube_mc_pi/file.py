@@ -1,6 +1,22 @@
 """
 Adaptor for communicating status to and from a file.  The file format is a 
 single line in a file with id,data,  e.g. 123,45
+
+The JSON config looks like this:
+
+    { "source": {
+        "type": "file",
+        "file_name": "test.txt"
+        },
+        
+      "target":  {
+        "type": "file",
+        "file_name": "test.txt"
+        }
+    }
+
+
+
 """
 
 from mcpi.block import Block

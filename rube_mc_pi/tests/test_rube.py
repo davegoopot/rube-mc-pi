@@ -7,6 +7,7 @@ import os.path
 from rube_mc_pi.file import FileSource
 from rube_mc_pi.file import FileTarget
 import rube_mc_pi.rube as rube
+from rube_mc_pi.scratchplug import ScratchTarget
 import time
 import unittest
 
@@ -232,3 +233,5 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
             if (os.path.exists("test")):
                 os.unlink("test")
     
+        
+        
