@@ -7,7 +7,6 @@ import os.path
 from rube_mc_pi.file import FileSource
 from rube_mc_pi.file import FileTarget
 import rube_mc_pi.rube as rube
-from rube_mc_pi.scratchplug import ScratchTarget
 import time
 import unittest
 
