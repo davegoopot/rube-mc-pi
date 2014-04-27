@@ -14,9 +14,6 @@ The JSON config looks like this:
         "file_name": "test.txt"
         }
     }
-
-
-
 """
 
 from mcpi.block import Block
@@ -30,7 +27,7 @@ class FileTarget(rube.Target): #pylint: disable=R0903
         
     def update_state(self, block_):
         with open(self.file_name, "w") as file_:
-            file_.write("%s,%s" % (block_.id, block_.data))
+            file_.write("%d,%d" % (block_.id, block_.data))
 
 class FileSource(rube.Source): #pylint: disable=R0903
     """Check the status by reading the file"""
