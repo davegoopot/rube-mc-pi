@@ -1,6 +1,19 @@
 """
 Adaptor for communicating status to and from a file.  The file format is a 
 single line in a file with id,data,  e.g. 123,45
+
+The JSON config looks like this:
+
+    { "source": {
+        "type": "file",
+        "file_name": "test.txt"
+        },
+        
+      "target":  {
+        "type": "file",
+        "file_name": "test.txt"
+        }
+    }
 """
 
 from mcpi.block import Block
@@ -14,7 +27,7 @@ class FileTarget(rube.Target): #pylint: disable=R0903
         
     def update_state(self, block_):
         with open(self.file_name, "w") as file_:
-            file_.write("%s,%s" % (block_.id, block_.data))
+            file_.write("%d,%d" % (block_.id, block_.data))
 
 class FileSource(rube.Source): #pylint: disable=R0903
     """Check the status by reading the file"""
