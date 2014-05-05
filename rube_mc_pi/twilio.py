@@ -36,4 +36,6 @@ class TwilioTarget(rube.Target): #pylint: disable=R0903
                 continue
             name, value = line.split("=")
             if name in allowed_names:
-                setattr(self, name, value)
+                setattr(self, name, value.rstrip())
+            else:
+                raise ValueError("Couldn't parse config: " + line)
