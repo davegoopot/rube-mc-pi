@@ -1,6 +1,6 @@
 """Unit testing for the Twilio plugin to send SMS"""
 
-import os.
+import os
 from rube_mc_pi.twilio import TwilioTarget
 import StringIO
 import unittest
@@ -16,7 +16,8 @@ class TestTwilio(unittest.TestCase): # pylint: disable=R0904
             config_file.write("""
 account_sid=554436   
 auth_token=blahblahbeans      
-"""
+""")
+
     @classmethod
     def tearDownClass(cls):  # pylint: disable=C0103
         os.remove("twilio.secret")
@@ -27,7 +28,8 @@ auth_token=blahblahbeans
 account_sid=123456   
 auth_token=blahblah     
 """
-        target = TwilioTarget(mock_config)
+        target = TwilioTarget()
+        target.parse_config(mock_config)
         self.assertEquals("123456", target.account_sid)
         self.assertEquals("blahblah", target.auth_token)
        
@@ -35,7 +37,7 @@ auth_token=blahblah
 no_such_attrib=broken        
 """
         with self.assertRaises(ValueError):
-            target = TwilioTarget(broken_config)
+            target.parse_config(broken_config)
         
 
     def test_load_config_from_file(self): # pylint: disable=C0111

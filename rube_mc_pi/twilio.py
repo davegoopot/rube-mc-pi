@@ -22,10 +22,12 @@ import rube
 
 class TwilioTarget(rube.Target): #pylint: disable=R0903
     """Send an SMS in response to the update method"""
-    def __init__(self, config):
+    def __init__(self):
         super(TwilioTarget, self).__init__()
         self.account_sid=""
         self.auth_token=""
+        with open("twilio.secret", "r") as config_file:
+            config = config_file.read()
         self.parse_config(config)
         
     def parse_config(self, config):
