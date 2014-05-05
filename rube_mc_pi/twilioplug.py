@@ -50,9 +50,13 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         """Send a message via Twilio"""
         client = TwilioRestClient(self.account_sid, self.auth_token)
         body = "New state = " + str(new_state)
-        print("Sending message")
-        message = client.messages.create(body=body,
-                               to=self.to_phone_number,
-                               from_=self.from_phone_number)
+        print("Calling phone")
+        call = client.calls.create(to=self.to_phone_number,
+                                   from_=self.from_phone_number,
+                                   url="http://twimlets.com/holdmusic",  
+                                    method="GET",  
+                                    fallback_method="GET",  
+                                    status_callback_method="GET",    
+                                    record="false")
         
-        print(message.sid)
+        print(call.sid)
