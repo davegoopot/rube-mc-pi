@@ -55,6 +55,10 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         
         if self.message_type == "call":
             self.call_phone(client, body)
+        elif self.message_type == "sms":
+            self.send_sms(client, body)
+        else:
+            raise RuntimeError("Unknown Twilio message type: " + self.message_type)
             
     def call_phone(self, client, body):
         print("Calling phone")
@@ -67,3 +71,11 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
                                    record="false")
         
         print(call.sid)
+    
+    def send_sms(self, client, body):
+        print("Sending message")
+        message = client.messages.create(body=body,
+                               to=self.to_phone_number,
+                               from_=self.from_phone_number)
+        
+        print(message.sid)
