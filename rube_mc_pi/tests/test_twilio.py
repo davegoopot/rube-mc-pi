@@ -1,6 +1,7 @@
 """Unit testing for the Twilio plugin to send SMS"""
 
 import os
+from rube_mc_pi import rube
 from rube_mc_pi.twilio import TwilioTarget
 import StringIO
 import unittest
@@ -28,7 +29,8 @@ auth_token=blahblahbeans
 account_sid=123456   
 auth_token=blahblah     
 """
-        target = TwilioTarget()
+        attribs = { "phone_number": "1234" }
+        target = TwilioTarget(attribs)
         target.parse_config(mock_config)
         self.assertEquals("123456", target.account_sid)
         self.assertEquals("blahblah", target.auth_token)
@@ -41,9 +43,27 @@ no_such_attrib=broken
         
 
     def test_load_config_from_file(self): # pylint: disable=C0111
-        target = TwilioTarget()
+        attribs = { "phone_number": "1234" }
+        target = TwilioTarget(attribs)
         self.assertEquals("554436", target.account_sid)
         self.assertEquals("blahblahbeans", target.auth_token)
         
         
-        
+    def test_json_config(self):  # pylint: disable=C0111
+        json = """
+    [
+        {
+         "source": {
+            "type": "mock"
+            }
+        ,
+          "target": {
+            "type": "twilio",
+            "phone_number": "+123456"
+            }
+        }
+    ]
+    """
+        config = rube.ConfigJsonParser.parse(json)
+        target = config[0].target
+        self.assertEquals(target.phone_number, "+123456")

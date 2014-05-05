@@ -22,13 +22,14 @@ import rube
 
 class TwilioTarget(rube.Target): #pylint: disable=R0903
     """Send an SMS in response to the update method"""
-    def __init__(self):
+    def __init__(self, attribs):
         super(TwilioTarget, self).__init__()
         self.account_sid=""
         self.auth_token=""
         with open("twilio.secret", "r") as config_file:
             config = config_file.read()
         self.parse_config(config)
+        self.phone_number = attribs["phone_number"]
         
     def parse_config(self, config):
         """Set up the object attributes based on the config"""
@@ -41,3 +42,7 @@ class TwilioTarget(rube.Target): #pylint: disable=R0903
                 setattr(self, name, value.rstrip())
             else:
                 raise ValueError("Couldn't parse config: " + line)
+
+    def update_state(self, new_state):
+        """Send a message via Twilio"""
+        pass
