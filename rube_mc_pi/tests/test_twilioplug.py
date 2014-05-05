@@ -24,7 +24,7 @@ auth_token=blahblahbeans
         os.remove("twilio.secret")
       
     def setUp(self): # pylint: disable=C0103
-        attribs = { "to_phone_number": "1234", "from_phone_number": "5673" }
+        attribs = { "to_phone_number": "1234", "from_phone_number": "5673", "message_type": "sms" }
         self.target = TwilioplugTarget(attribs)
     
     def test_load_config(self): # pylint: disable=C0111
@@ -59,7 +59,8 @@ no_such_attrib=broken
           "target": {
             "type": "twilioplug",
             "from_phone_number": "+123456",
-            "to_phone_number": "+879"
+            "to_phone_number": "+879",
+            "message_type": "sms"
             }
         }
     ]
@@ -68,6 +69,7 @@ no_such_attrib=broken
         target = config[0].target
         self.assertEquals(target.from_phone_number, "+123456")
         self.assertEquals(target.to_phone_number, "+879")
+        self.assertEquals(target.message_type, "sms")
 
 if __name__ == '__main__':
     unittest.main()

@@ -14,6 +14,7 @@ The JSON config looks like this:
         "type": "twilioplug",
         "to_phone_number": "+4412345678",
         "from_phone_number": "+4412345678"
+        "message_type": "sms"    or could be "call"
         }
     }
 """
@@ -33,6 +34,7 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         self.parse_config(config)
         self.from_phone_number = attribs["from_phone_number"]
         self.to_phone_number = attribs["to_phone_number"]
+        self.message_type = attribs["message_type"]
         
     def parse_config(self, config):
         """Set up the object attributes based on the config"""
@@ -50,13 +52,18 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         """Send a message via Twilio"""
         client = TwilioRestClient(self.account_sid, self.auth_token)
         body = "New state = " + str(new_state)
+        
+        if self.message_type == "call":
+            self.call_phone(client, body)
+            
+    def call_phone(self, client, body):
         print("Calling phone")
         call = client.calls.create(to=self.to_phone_number,
                                    from_=self.from_phone_number,
                                    url="http://twimlets.com/holdmusic",  
-                                    method="GET",  
-                                    fallback_method="GET",  
-                                    status_callback_method="GET",    
-                                    record="false")
+                                   method="GET",  
+                                   fallback_method="GET",  
+                                   status_callback_method="GET",    
+                                   record="false")
         
         print(call.sid)
