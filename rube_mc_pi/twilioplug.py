@@ -5,7 +5,7 @@ Only expecting to implement a Target object.  Not clear how a Source object
 would work.
 
 The Twilio credentials are stored in the file "twilio.secret".  This file is
-not sent to the git repo for obvious reasons!  
+not sent to the git repo for obvious reasons!  See "twilio.secret.example"
 
 The JSON config looks like this:
 
