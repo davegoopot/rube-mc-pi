@@ -19,16 +19,16 @@ The JSON config looks like this:
     }
 """
 
-from mcpi.block import Block
-import rube
+from rube_mc_pi.mcpi.block import Block
+import rube_mc_pi.rube as rube
 from twilio.rest import TwilioRestClient
 
 class TwilioplugTarget(rube.Target): #pylint: disable=R0903
     """Send an SMS in response to the update method"""
     def __init__(self, attribs):
         super(TwilioplugTarget, self).__init__()
-        self.account_sid=""
-        self.auth_token=""
+        self.account_sid = ""
+        self.auth_token = ""
         with open("twilio.secret", "r") as config_file:
             config = config_file.read()
         self.parse_config(config)
@@ -38,7 +38,7 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         
     def parse_config(self, config):
         """Set up the object attributes based on the config"""
-        allowed_names=["account_sid", "auth_token"]
+        allowed_names = ["account_sid", "auth_token"]
         for line in config.split("\n"):
             if "=" not in line:
                 continue
@@ -54,13 +54,15 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         body = "New state = " + str(new_state)
         
         if self.message_type == "call":
-            self.call_phone(client, body)
+            self.call_phone(client)
         elif self.message_type == "sms":
             self.send_sms(client, body)
         else:
-            raise RuntimeError("Unknown Twilio message type: " + self.message_type)
+            raise RuntimeError("Unknown Twilio message type: " + 
+                                self.message_type)
             
-    def call_phone(self, client, body):
+    def call_phone(self, client):
+        """Use the Twilio API to call the phone and play recorded music"""
         print("Calling phone")
         call = client.calls.create(to=self.to_phone_number,
                                    from_=self.from_phone_number,
@@ -73,6 +75,7 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         print(call.sid)
     
     def send_sms(self, client, body):
+        """Use the Twilio API to send an SMS to the phone with the block type"""
         print("Sending message")
         message = client.messages.create(body=body,
                                to=self.to_phone_number,

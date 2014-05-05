@@ -2,7 +2,7 @@
 unittesting.
  """
 
-from rube_mc_pi.rube import *
+from rube_mc_pi.rube import Source, Target
 
 class MockSource(Source): #pylint: disable=R0903
     """Stand in for a real source object, counting times called and updating

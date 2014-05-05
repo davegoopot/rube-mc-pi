@@ -16,8 +16,8 @@ The JSON config looks like this:
     }
 """
 
-from mcpi.block import Block
-import rube
+from rube_mc_pi.mcpi.block import Block
+import rube_mc_pi.rube as rube
 
 class FileTarget(rube.Target): #pylint: disable=R0903
     """Write the update out to the file"""

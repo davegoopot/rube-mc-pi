@@ -25,10 +25,10 @@ The JSON config looks like this:
 
 """
 
-import mcpi.block as block
+import rube_mc_pi.mcpi.block as block
 from multiprocessing import Process, Queue
 from Queue import Empty
-import rube
+import rube_mc_pi.rube as rube
 import scratch as scratch_ex
 
 
@@ -42,6 +42,7 @@ class ScratchplugSource(rube.Source): #pylint: disable=R0903
         super(ScratchplugSource, self).__init__()
         self.scratch_link = ScratchLink(attribs)
         self.last_block_state = block.AIR
+        self.from_scratch = None
 
     def receive_from_scratch(self, queue):
         """Look for a "x,y" broadcast and convert to a block.
@@ -49,10 +50,10 @@ class ScratchplugSource(rube.Source): #pylint: disable=R0903
         state unchanged.
         """
         self.from_scratch = None
-        received = self.scratch_link.scratch_connection.receive()[1];
+        received = self.scratch_link.scratch_connection.receive()[1]
         try:
-            id, data = received.split(",")
-            _block = block.Block(int(id), int(data))
+            id_, data = received.split(",")
+            _block = block.Block(int(id_), int(data))
         except ValueError:
             #Assume that the broadcast wasn't intended as a block change
             print("Unparsable broadcast:" + received)
@@ -108,5 +109,6 @@ class ScratchLink(object):
     def __init__(self, attribs):
         self.server_address = attribs["server_address"]
         self.server_port = attribs.get("server_port", 42001)
-        self.scratch_connection = scratch_ex.Scratch(self.server_address, port=self.server_port)   
+        self.scratch_connection = scratch_ex.Scratch(self.server_address,
+                                                     port=self.server_port)   
    

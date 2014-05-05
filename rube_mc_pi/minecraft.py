@@ -22,10 +22,9 @@ The JSON looks like this:
 
 """
 
-import collections
-from mcpi.minecraft import Minecraft
-import mcpi.block as block
-import rube
+from rube_mc_pi.mcpi.minecraft import Minecraft
+import rube_mc_pi.mcpi.block as block
+import rube_mc_pi.rube as rube
 
 
 class MinecraftSource(rube.Source): #pylint: disable=R0903
@@ -68,8 +67,8 @@ class MinecraftLink(object):
         self.coords_y = attribs["coords_y"]
         self.coords_z = attribs["coords_z"]
         self.world_connection = Minecraft.create(self.server_address,
-                                                 self.server_port)                                       
-                                       
+                                                 self.server_port)
+                                                 
 if __name__ == "__main__":
     JSON_CONFIG = ""
     with open("config.json", "r") as f:

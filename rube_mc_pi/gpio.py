@@ -17,10 +17,10 @@ The JSON config looks like this:
     }
 """
 
-from mcpi import block
-from mcpi.block import Block
+from rube_mc_pi.mcpi import block
+from rube_mc_pi.mcpi.block import Block
 import RPi.GPIO as GPIO
-import rube
+import rube_mc_pi.rube as rube
 
 
 
@@ -41,8 +41,10 @@ class GpioSource(rube.Source): #pylint: disable=R0903
     def __init__(self, attribs):
         super(GpioSource, self).__init__()
         self.pin = attribs["pin"]
-        self.low_state_block = Block(attribs["low_state_block"][0], attribs["low_state_block"][1])
-        self.high_state_block = Block(attribs["high_state_block"][0], attribs["high_state_block"][1])
+        self.low_state_block = Block(attribs["low_state_block"][0], 
+                                     attribs["low_state_block"][1])
+        self.high_state_block = Block(attribs["high_state_block"][0],
+                                      attribs["high_state_block"][1])
         GpioSource.gpio_in_setup(self.pin)
 
     def poll_state(self):
