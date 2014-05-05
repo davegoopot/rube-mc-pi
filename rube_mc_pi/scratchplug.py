@@ -1,6 +1,13 @@
 """
 Adaptor for scratch using the scratchpy interface
 
+To function as a source, the scratch program should just broadcast a block state
+e.g. broadcast 41,0
+
+To function as a target, the scratch program should listen for broadcasts saying
+either BLOCK_PRESENT or BLOCK_ABSENT.  Implementation of individual block types
+has not yet been implemented
+
 The JSON config looks like this:
 
     { "source": {

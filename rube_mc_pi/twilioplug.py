@@ -49,6 +49,10 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
     def update_state(self, new_state):
         """Send a message via Twilio"""
         client = TwilioRestClient(self.account_sid, self.auth_token)
-        body = "New state = " + new_state
+        body = "New state = " + str(new_state)
+        print("Sending message")
+        message = client.messages.create(body=body,
+                               to=self.to_phone_number,
+                               from_=self.from_phone_number)
         
-        
+        print(message.sid)
