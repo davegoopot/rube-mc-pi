@@ -1,5 +1,6 @@
 """Unit testing for the Twilio plugin to send SMS"""
 
+from ConfigParser import NoOptionError, SafeConfigParser
 import os
 from rube_mc_pi import rube
 from rube_mc_pi.twilioplug import TwilioplugTarget
@@ -15,6 +16,7 @@ class TestTwilio(unittest.TestCase): # pylint: disable=R0904
     def setUpClass(cls): # pylint: disable=C0103 
         with open("twilio.secret", "w") as config_file:
             config_file.write("""
+[twilio]
 account_sid=554436   
 auth_token=blahblahbeans      
 """)
@@ -29,18 +31,24 @@ auth_token=blahblahbeans
     
     def test_load_config(self): # pylint: disable=C0111
         mock_config = """
+[twilio]
 account_sid=123456   
 auth_token=blahblah     
 """
-        self.target.parse_config(mock_config)
+        parser = SafeConfigParser()
+        parser.readfp(StringIO.StringIO(mock_config))
+        self.target.parse_config(parser)
         self.assertEquals("123456", self.target.account_sid)
         self.assertEquals("blahblah", self.target.auth_token)
        
         broken_config = """
+[twilio]
 no_such_attrib=broken        
 """
-        with self.assertRaises(ValueError):
-            self.target.parse_config(broken_config)
+        with self.assertRaises(NoOptionError):
+            parser = SafeConfigParser()
+            parser.readfp(StringIO.StringIO(broken_config))
+            self.target.parse_config(parser)
         
 
     def test_load_config_from_file(self): # pylint: disable=C0111

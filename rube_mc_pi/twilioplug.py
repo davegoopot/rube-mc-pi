@@ -19,6 +19,7 @@ The JSON config looks like this:
     }
 """
 
+from ConfigParser import SafeConfigParser
 from rube_mc_pi.mcpi.block import Block
 import rube_mc_pi.rube as rube
 from twilio.rest import TwilioRestClient
@@ -29,24 +30,21 @@ class TwilioplugTarget(rube.Target): #pylint: disable=R0903
         super(TwilioplugTarget, self).__init__()
         self.account_sid = ""
         self.auth_token = ""
-        with open("twilio.secret", "r") as config_file:
-            config = config_file.read()
-        self.parse_config(config)
+        parser = SafeConfigParser()
+        parser.read("twilio.secret")
+        print(parser)
+        
+        self.parse_config(parser)
+
         self.from_phone_number = attribs["from_phone_number"]
         self.to_phone_number = attribs["to_phone_number"]
         self.message_type = attribs["message_type"]
         
-    def parse_config(self, config):
-        """Set up the object attributes based on the config"""
-        allowed_names = ["account_sid", "auth_token"]
-        for line in config.split("\n"):
-            if "=" not in line:
-                continue
-            name, value = line.split("=")
-            if name in allowed_names:
-                setattr(self, name, value.rstrip())
-            else:
-                raise ValueError("Couldn't parse config: " + line)
+    def parse_config(self,  parser):
+        """Read the SafeConfigParser object and set up the instance"""
+        self.account_sid = parser.get("twilio", "account_sid")
+        self.auth_token = parser.get("twilio", "auth_token")
+        
 
     def update_state(self, new_state):
         """Send a message via Twilio"""
