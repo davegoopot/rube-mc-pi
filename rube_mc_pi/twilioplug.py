@@ -11,25 +11,28 @@ The JSON config looks like this:
 
     {    
       "target":  {
-        "type": "twilio",
-        "phone_number": "+4412345678"
+        "type": "twilioplug",
+        "to_phone_number": "+4412345678",
+        "from_phone_number": "+4412345678"
         }
     }
 """
 
 from mcpi.block import Block
 import rube
+from twilio.rest import TwilioRestClient
 
-class TwilioTarget(rube.Target): #pylint: disable=R0903
+class TwilioplugTarget(rube.Target): #pylint: disable=R0903
     """Send an SMS in response to the update method"""
     def __init__(self, attribs):
-        super(TwilioTarget, self).__init__()
+        super(TwilioplugTarget, self).__init__()
         self.account_sid=""
         self.auth_token=""
         with open("twilio.secret", "r") as config_file:
             config = config_file.read()
         self.parse_config(config)
-        self.phone_number = attribs["phone_number"]
+        self.from_phone_number = attribs["from_phone_number"]
+        self.to_phone_number = attribs["to_phone_number"]
         
     def parse_config(self, config):
         """Set up the object attributes based on the config"""
@@ -45,4 +48,7 @@ class TwilioTarget(rube.Target): #pylint: disable=R0903
 
     def update_state(self, new_state):
         """Send a message via Twilio"""
-        pass
+        client = TwilioRestClient(self.account_sid, self.auth_token)
+        body = "New state = " + new_state
+        
+        

@@ -2,7 +2,7 @@
 
 import os
 from rube_mc_pi import rube
-from rube_mc_pi.twilio import TwilioTarget
+from rube_mc_pi.twilioplug import TwilioplugTarget
 import StringIO
 import unittest
 
@@ -22,31 +22,30 @@ auth_token=blahblahbeans
     @classmethod
     def tearDownClass(cls):  # pylint: disable=C0103
         os.remove("twilio.secret")
-            
+      
+    def setUp(self): # pylint: disable=C0103
+        attribs = { "to_phone_number": "1234", "from_phone_number": "5673" }
+        self.target = TwilioplugTarget(attribs)
     
     def test_load_config(self): # pylint: disable=C0111
         mock_config = """
 account_sid=123456   
 auth_token=blahblah     
 """
-        attribs = { "phone_number": "1234" }
-        target = TwilioTarget(attribs)
-        target.parse_config(mock_config)
-        self.assertEquals("123456", target.account_sid)
-        self.assertEquals("blahblah", target.auth_token)
+        self.target.parse_config(mock_config)
+        self.assertEquals("123456", self.target.account_sid)
+        self.assertEquals("blahblah", self.target.auth_token)
        
         broken_config = """
 no_such_attrib=broken        
 """
         with self.assertRaises(ValueError):
-            target.parse_config(broken_config)
+            self.target.parse_config(broken_config)
         
 
     def test_load_config_from_file(self): # pylint: disable=C0111
-        attribs = { "phone_number": "1234" }
-        target = TwilioTarget(attribs)
-        self.assertEquals("554436", target.account_sid)
-        self.assertEquals("blahblahbeans", target.auth_token)
+        self.assertEquals("554436", self.target.account_sid)
+        self.assertEquals("blahblahbeans", self.target.auth_token)
         
         
     def test_json_config(self):  # pylint: disable=C0111
@@ -58,12 +57,17 @@ no_such_attrib=broken
             }
         ,
           "target": {
-            "type": "twilio",
-            "phone_number": "+123456"
+            "type": "twilioplug",
+            "from_phone_number": "+123456",
+            "to_phone_number": "+879"
             }
         }
     ]
     """
         config = rube.ConfigJsonParser.parse(json)
         target = config[0].target
-        self.assertEquals(target.phone_number, "+123456")
+        self.assertEquals(target.from_phone_number, "+123456")
+        self.assertEquals(target.to_phone_number, "+879")
+
+if __name__ == '__main__':
+    unittest.main()
