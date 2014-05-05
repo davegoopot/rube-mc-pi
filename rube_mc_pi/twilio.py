@@ -30,8 +30,10 @@ class TwilioTarget(rube.Target): #pylint: disable=R0903
         
     def parse_config(self, config):
         """Set up the object attributes based on the config"""
+        allowed_names=["account_sid", "auth_token"]
         for line in config.split("\n"):
-            if line.startswith("account_sid="):
-                self.account_sid = line[len("account_sid="):]
-            if line.startswith("auth_token="):
-                self.auth_token = line[len("auth_token="):]
+            if "=" not in line:
+                continue
+            name, value = line.split("=")
+            if name in allowed_names:
+                setattr(self, name, value)
