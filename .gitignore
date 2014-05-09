@@ -39,5 +39,7 @@ nosetests.xml
 
 #gedit
 *~
+
 twilio.secret
-
+*.e4p
+.eric4project

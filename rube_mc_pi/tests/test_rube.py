@@ -251,3 +251,4 @@ def mock_urlopen(url):
     """Used for monkey patch the URL openner 
     for the unit tests of http plugin"""
     return StringIO.StringIO("1,2")
+
