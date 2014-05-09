@@ -1,8 +1,10 @@
 """Code to manage the Rube Goldberg project for the Manchester CoderDojo """
 
 import collections
+import importlib
 import json
 import time
+
 
 class RubeController(object):
     """"Responsible for controlling the interactions between components in
@@ -114,7 +116,8 @@ class ConfigJsonParser(object):
         then return a new instance with all the attributes set
         as per the passed dictionary
         """
-        module = __import__(module_name)
+        name = "rube_mc_pi." + module_name
+        module = importlib.import_module(name)
         class_name = module_name.capitalize() + type_.capitalize()
         class_ = getattr(module, class_name)
         instance = class_(attribute_dict)

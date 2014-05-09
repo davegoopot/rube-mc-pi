@@ -1,14 +1,15 @@
 """Unit testing module for the whole Rube Goldberg code project"""
-from file import FileSource
-from file import FileTarget
-from http import HttpSource
-import http
-from mcpi.block import Block
-from mock import MockSource
-from mock import MockTarget
-import mock2
+
+from rube_mc_pi.mcpi.block import Block
+import rube_mc_pi.http as http
+from rube_mc_pi.http import HttpSource
+from rube_mc_pi.mock import MockSource
+from rube_mc_pi.mock import MockTarget
+import rube_mc_pi.mock2 as mock2
 import os.path
-import rube  
+from rube_mc_pi.file import FileSource
+from rube_mc_pi.file import FileTarget
+import rube_mc_pi.rube as rube
 import StringIO
 import time
 import unittest
@@ -250,5 +251,3 @@ def mock_urlopen(url):
     """Used for monkey patch the URL openner 
     for the unit tests of http plugin"""
     return StringIO.StringIO("1,2")
-
-        

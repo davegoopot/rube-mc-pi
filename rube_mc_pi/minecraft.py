@@ -1,11 +1,31 @@
 """
 Adaptor for minecraft using Bukkit and the Raspberry Juice plugin
 
+The JSON looks like this:
+
+{ "source": {
+        "type": "minecraft",
+        "coords_x": 1,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        },
+        
+      "target":  {
+        "type": "minecraft",
+        "coords_x": 2,
+        "coords_y": 10,
+        "coords_z": 3,
+        "server_address": "localhost"
+        }
+
+
 """
 
-from mcpi.minecraft import Minecraft
-import mcpi.block as block
-import rube
+
+from rube_mc_pi.mcpi.minecraft import Minecraft
+import rube_mc_pi.mcpi.block as block
+import rube_mc_pi.rube as rube
 
 
 class MinecraftSource(rube.Source): #pylint: disable=R0903
@@ -19,7 +39,7 @@ class MinecraftSource(rube.Source): #pylint: disable=R0903
         block_ = self.mc_link.world_connection.getBlock(self.mc_link.coords_x,
                                                         self.mc_link.coords_y,
                                                         self.mc_link.coords_z)
-        print "Got " + str(block_)
+        
         return block_
 
 class MinecraftTarget(rube.Target): #pylint: disable=R0903
@@ -48,8 +68,9 @@ class MinecraftLink(object):   #pylint: disable=R0903
         self.coords_y = attribs["coords_y"]
         self.coords_z = attribs["coords_z"]
         self.world_connection = Minecraft.create(self.server_address,
-                                              self.server_port)
-                                              
+                                                 self.server_port)
+                                                 
+
 if __name__ == "__main__":
     JSON_CONFIG = ""
     with open("config.json", "r") as f:

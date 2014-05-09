@@ -2,9 +2,9 @@
 unittesting.
  """
 
-import rube
+from rube_mc_pi.rube import Source, Target
 
-class MockSource(rube.Source): #pylint: disable=R0903
+class MockSource(Source): #pylint: disable=R0903
     """Stand in for a real source object, counting times called and updating
     as requested by the test methods.
     """
@@ -31,7 +31,7 @@ class MockSource(rube.Source): #pylint: disable=R0903
         return self.state
 
 
-class MockTarget(rube.Target): #pylint: disable=R0903
+class MockTarget(Target): #pylint: disable=R0903
     """Stand in for a real target object.  Takes record of calls made to update
     """
     def __init__(self, attribs):
