@@ -10,4 +10,5 @@ setup(name='rube_mc_pi',
       packages=['rube_mc_pi'],
       zip_safe=False,
       test_suite='nose.collector',
+      install_requires = ['pyfirmata'],
       tests_require=['nose'],)
