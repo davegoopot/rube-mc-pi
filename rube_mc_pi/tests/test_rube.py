@@ -1,8 +1,6 @@
 """Unit testing module for the whole Rube Goldberg code project"""
 
 from rube_mc_pi.mcpi.block import Block
-import rube_mc_pi.http as http
-from rube_mc_pi.http import HttpSource
 from rube_mc_pi.mock import MockSource
 from rube_mc_pi.mock import MockTarget
 import rube_mc_pi.mock2 as mock2
@@ -236,19 +234,4 @@ class TestRube(unittest.TestCase): # pylint: disable=R0904
             if (os.path.exists("test")):
                 os.unlink("test")
                 
-    def test_http_plugin_source(self): # pylint: disable=C0111
-        http_source = HttpSource({"address": "http://localhost/"})
-        self.assertEquals("http://localhost/", http_source.address)
-        http.urllib2.urlopen = mock_urlopen
-        
-        result = http_source.poll_state()
-        self.assertEquals(result.id, 1)
-        self.assertEquals(result.data, 2)
-        
-        
-
-def mock_urlopen(url):
-    """Used for monkey patch the URL openner 
-    for the unit tests of http plugin"""
-    return StringIO.StringIO("1,2")
 

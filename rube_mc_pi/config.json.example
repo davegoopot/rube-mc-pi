@@ -30,8 +30,16 @@
         "coords_z": 3,
         "server_address": "localhost"
         }
-    }
-        
+    },
     
+    { "source": {
+        "type": "file",
+        "file_name": "test.txt"
+        },
+      "target":  {
+        "type": "http",
+        "address": "http://test.com/update_handler"
+        }
+    }
     
 ]

@@ -2,7 +2,6 @@
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 import cgi
-import urlparse
 
 class DemoHttpServer(BaseHTTPRequestHandler):
     """Keep a simple dictionary of request paths.  Return (0,0) if hasn't
@@ -10,7 +9,7 @@ class DemoHttpServer(BaseHTTPRequestHandler):
     
     VALUE_DICT = {}
     
-    def do_GET(self):
+    def do_GET(self): # pylint: disable=C0103
         """Return the value recorded for the path"""
         value = DemoHttpServer.VALUE_DICT.get(self.path, "0,0")
         
@@ -19,7 +18,9 @@ class DemoHttpServer(BaseHTTPRequestHandler):
         self.wfile.write(value)
         return
 
-    def do_POST(self):
+    def do_POST(self): # pylint: disable=C0103
+        """Add to VALUE_DICT the key of the request path and the value of
+        whatever is in the "block" parameter."""
         form = cgi.FieldStorage(
             fp=self.rfile, 
             headers=self.headers,
@@ -41,6 +42,6 @@ class DemoHttpServer(BaseHTTPRequestHandler):
         
 if __name__ == '__main__':
     from BaseHTTPServer import HTTPServer
-    server = HTTPServer(('192.168.56.101', 8888), DemoHttpServer)
+    SERVER = HTTPServer(('192.168.56.101', 8888), DemoHttpServer)
     print 'Starting server, use <Ctrl-C> to stop'
-    server.serve_forever()
+    SERVER.serve_forever()

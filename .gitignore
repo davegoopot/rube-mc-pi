@@ -43,3 +43,4 @@ nosetests.xml
 twilio.secret
 *.e4p
 .eric4project
+rube_mc_pi/test.txt
