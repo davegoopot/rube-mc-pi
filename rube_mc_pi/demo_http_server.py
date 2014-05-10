@@ -2,6 +2,7 @@
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 import cgi
+import sys
 
 class DemoHttpServer(BaseHTTPRequestHandler):
     """Keep a simple dictionary of request paths.  Return (0,0) if hasn't
@@ -41,7 +42,13 @@ class DemoHttpServer(BaseHTTPRequestHandler):
         
         
 if __name__ == '__main__':
+    SERVERNAME = "localhost"
+    PORT = 8080
+    if len(sys.argv) > 1:
+        SERVERNAME = sys.argv[1]
+    if len(sys.argv) > 2:
+        PORT = int(sys.argv[2])
     from BaseHTTPServer import HTTPServer
-    SERVER = HTTPServer(('192.168.56.101', 8888), DemoHttpServer)
+    SERVER = HTTPServer((SERVERNAME, PORT), DemoHttpServer)
     print 'Starting server, use <Ctrl-C> to stop'
     SERVER.serve_forever()
