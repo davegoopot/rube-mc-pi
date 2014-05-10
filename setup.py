@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='rube_mc_pi',
-      version='0.1.3',
+      version='0.2.0',
       description='Controller code for the Manchester CoderDojo Rube Goldberg Proejct',
       url='https://github.com/davegoopot/rube-mc-pi',
       author='Dave Potts',
