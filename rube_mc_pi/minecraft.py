@@ -70,9 +70,9 @@ class MinecraftLink(object):   #pylint: disable=R0903
     def reuse_or_create_connection(address,  port):
         """Make sure only one connections is opened to each server"""
         if (address,  port) not in MinecraftLink.connection_pool:
-            MinecraftLink.connection_pool[(address,  port)] =  Minecraft.create(address,
-                                                                                                                          port)
-                                                                                                        
+            MinecraftLink.connection_pool[(address,  port)] =  \
+                            Minecraft.create(address, port)
+        
         return MinecraftLink.connection_pool[(address,  port)]
             
         
@@ -82,8 +82,9 @@ class MinecraftLink(object):   #pylint: disable=R0903
         self.coords_x = attribs["coords_x"]
         self.coords_y = attribs["coords_y"]
         self.coords_z = attribs["coords_z"]
-        self.world_connection = MinecraftLink.reuse_or_create_connection(self.server_address,
-                                                 self.server_port)
+        self.world_connection = \
+            MinecraftLink.reuse_or_create_connection(self.server_address,
+                                                                            self.server_port)
 
 
 if __name__ == "__main__":
