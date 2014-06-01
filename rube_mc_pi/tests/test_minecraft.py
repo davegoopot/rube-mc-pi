@@ -2,6 +2,8 @@
 
 from rube_mc_pi.mcpi.minecraft import Minecraft
 from rube_mc_pi.minecraft import MinecraftLink
+from rube_mc_pi.minecraft import MinecraftSource
+from rube_mc_pi.minecraft import MinecraftTarget
 import unittest
 
 
@@ -25,6 +27,24 @@ class TestMinecraft(unittest.TestCase): # pylint: disable=R0904
         link2 = MinecraftLink(attribs)
         self.assertIs(link1.world_connection,  link2.world_connection)
 
+        attribs["server_address"] = "different address"
+        link3 = MinecraftLink(attribs)
+        self.assertIsNot(link1.world_connection,  link3.world_connection)
+        
+        attribs["server_port"] = 1234
+        link4 = MinecraftLink(attribs)
+        self.assertIsNot(link3.world_connection,  link4.world_connection)
+
+        src1 = MinecraftSource(attribs)
+        attribs["coords_x"] = 5
+        src2 = MinecraftSource(attribs)
+        self.assertIs(src1.mc_link.world_connection,  src2.mc_link.world_connection)
+
+        trg1 = MinecraftTarget(attribs)
+        attribs["coords_x"] = 6
+        trg2 = MinecraftTarget(attribs)
+        self.assertIs(trg1.mc_link.world_connection,  trg2.mc_link.world_connection)
+        self.assertIs(trg1.mc_link.world_connection,  src1.mc_link.world_connection)
 
 @staticmethod
 def mock_create_method(address = "localhost", port = 4711):
