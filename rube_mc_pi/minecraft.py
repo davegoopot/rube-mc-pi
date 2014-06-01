@@ -59,17 +59,32 @@ class MinecraftLink(object):   #pylint: disable=R0903
     """
     Responsible for storing the state of the link to a server and the location
     of the block that is to be monitored or updated.
+
+    The link object should manage connections so that only one connection is created
+    to each server.  This connection is shared between all instances that need it.
     """
-                                       
+
+    connection_pool = {}
+    
+    @staticmethod
+    def reuse_or_create_connection(address,  port):
+        """Make sure only one connections is opened to each server"""
+        if (address,  port) not in MinecraftLink.connection_pool:
+            MinecraftLink.connection_pool[(address,  port)] =  Minecraft.create(address,
+                                                                                                                          port)
+                                                                                                        
+        return MinecraftLink.connection_pool[(address,  port)]
+            
+        
     def __init__(self, attribs):
         self.server_address = attribs["server_address"]
         self.server_port = attribs.get("server_port", 4711)
         self.coords_x = attribs["coords_x"]
         self.coords_y = attribs["coords_y"]
         self.coords_z = attribs["coords_z"]
-        self.world_connection = Minecraft.create(self.server_address,
+        self.world_connection = MinecraftLink.reuse_or_create_connection(self.server_address,
                                                  self.server_port)
-                                                 
+
 
 if __name__ == "__main__":
     JSON_CONFIG = ""
