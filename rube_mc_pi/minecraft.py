@@ -36,7 +36,7 @@ class MinecraftSource(rube.Source): #pylint: disable=R0903
 
     def poll_state(self):
         """Return the block value from the connected Minecraft server"""
-        block_ = self.mc_link.world_connection.getBlock(self.mc_link.coords_x,
+        block_ = self.mc_link.world_connection.getBlockWithData(self.mc_link.coords_x,
                                                         self.mc_link.coords_y,
                                                         self.mc_link.coords_z)
         
