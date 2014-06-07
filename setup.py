@@ -2,7 +2,7 @@ import multiprocessing
 from setuptools import setup
 
 setup(name='rube_mc_pi',
-      version='0.2.1',
+      version='0.2.2',
       description='Controller code for the Manchester CoderDojo Rube Goldberg Proejct',
       url='https://github.com/davegoopot/rube-mc-pi',
       author='Dave Potts',
